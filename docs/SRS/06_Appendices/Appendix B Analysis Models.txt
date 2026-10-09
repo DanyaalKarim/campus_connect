@@ -1,0 +1,155 @@
+# Appendix B: Analysis Models
+
+## B.1 Overview
+
+This appendix presents the analysis models for CampusConnect, including 
+system context diagram, use case diagram, class diagram, sequence 
+diagrams, activity diagram, entity-relationship diagram, state diagram, 
+data flow diagram, and component diagram.
+
+## B.2 System Context Diagram
+
+The System Context Diagram shows CampusConnect and its interactions with 
+external entities including users and backend services.
+
+Diagram Location: diagrams/diagram_01_system_context.png
+
+Description:
+- Central system: CampusConnect
+- External actors: Student, Organizer, Admin
+- Backend services: Firebase, Google Cloud
+
+## B.3 Use Case Diagram
+
+The Use Case Diagram shows all actors and their interactions with the system.
+
+Diagram Location: diagrams/diagram_02_use_case.png
+
+Actors and Use Cases:
+- Student: 11 use cases (signup, login, browse, register, etc.)
+- Organizer: 6 use cases (create event, scan QR, etc.)
+- Admin: 5 use cases (approve, reject, manage users, etc.)
+
+## B.4 Class Diagram
+
+The Class Diagram shows the main classes, their attributes, methods, and 
+relationships.
+
+Diagram Location: diagrams/diagram_03_class.png
+
+Main Classes:
+- User (abstract base class)
+- Student, Organizer, Admin (extends User)
+- Event
+- Registration
+- Attendance
+- Feedback
+- Certificate
+
+## B.5 Sequence Diagram: Event Registration
+
+Shows the sequence of interactions during event registration.
+
+Diagram Location: diagrams/diagram_04_sequence_registration.png
+
+Participants:
+- Student
+- Mobile App
+- Firestore
+- Storage
+
+## B.6 Sequence Diagram: QR Attendance
+
+Shows the sequence of interactions during QR attendance marking.
+
+Diagram Location: diagrams/diagram_05_sequence_attendance.png
+
+Participants:
+- Student
+- Organizer
+- Web Dashboard
+- Firestore
+
+## B.7 Activity Diagram: Event Lifecycle
+
+Shows the complete lifecycle of an event from creation to completion.
+
+Diagram Location: diagrams/diagram_06_activity_lifecycle.png
+
+Flow:
+Pending → Approved → Completed → Archived
+Rejected → Pending (resubmit)
+
+## B.8 Entity-Relationship Diagram
+
+Shows database entities and their relationships.
+
+Diagram Location: diagrams/diagram_07_erd.png
+
+Entities:
+- USER (uid PK)
+- EVENT (eventId PK)
+- REGISTRATION (regId PK)
+- ATTENDANCE (attId PK)
+- FEEDBACK (fbId PK)
+- CERTIFICATE (certId PK)
+- SOCIETY (societyId PK)
+
+## B.9 State Diagram: Event Status
+
+Shows event status transitions.
+
+Diagram Location: diagrams/diagram_08_state.png
+
+States:
+- Pending (initial)
+- Approved
+- Rejected
+- Completed
+- Archived (final)
+
+## B.10 Data Flow Diagram
+
+Shows the flow of data through the system.
+
+Diagram Location: diagrams/diagram_09_data_flow.png
+
+Levels:
+- DFD Level 0 (Context)
+- DFD Level 1 (Main processes)
+
+## B.11 Component Diagram
+
+Shows system components and their dependencies.
+
+Diagram Location: diagrams/diagram_10_component.png
+
+Components:
+- Student Mobile App (Flutter)
+- Organizer Web Dashboard (Flutter Web)
+- Admin Web Dashboard (Flutter Web)
+- Firebase services
+
+## B.12 Diagram References
+
+All diagrams are stored in: `docs/SRS/06_Appendices/diagrams/`
+
+| Diagram | File |
+|---------|------|
+| System Context | diagram_01_system_context.png |
+| Use Case | diagram_02_use_case.png |
+| Class | diagram_03_class.png |
+| Sequence - Registration | diagram_04_sequence_registration.png |
+| Sequence - Attendance | diagram_05_sequence_attendance.png |
+| Activity - Lifecycle | diagram_06_activity_lifecycle.png |
+| ERD | diagram_07_erd.png |
+| State - Event Status | diagram_08_state.png |
+| Data Flow | diagram_09_data_flow.png |
+| Component | diagram_10_component.png |
+
+---
+
+Document Version: 1.0
+Last Updated: [Aaj ki date]
+Author: [Aapka naam]
+Status: Draft

@@ -1,0 +1,116 @@
+# UC-02: Student Login
+
+## Use Case Information
+
+| Field | Value |
+|-------|-------|
+| Use Case ID | UC-02 |
+| Use Case Name | Student Login |
+| Actor | Registered Student |
+| Priority | High |
+| Complexity | Low |
+
+## Description
+
+A registered student logs into CampusConnect to access their account, view events, register for activities, and manage their profile.
+
+## Preconditions
+
+1. Student has an existing account
+2. Student is not logged in
+3. Internet connection is available
+
+## Postconditions
+
+1. Student is authenticated successfully
+2. Session created in Firebase
+3. Student redirected to Home screen
+4. FCM token registered for notifications
+
+## Main Flow
+
+1. Student opens the app
+2. System shows Splash screen
+3. System checks authentication state
+4. System finds no active session
+5. System shows Login screen
+6. Student enters email
+7. Student enters password
+8. Student taps "Login" button
+9. System validates credentials with Firebase Auth
+10. System retrieves user role from Firestore
+11. System registers FCM token
+12. System redirects to Home screen
+
+## Alternative Flows
+
+### A1: Invalid Credentials
+- At step 9, credentials invalid
+- System shows "Invalid email or password"
+- Return to step 6
+
+### A2: Account Disabled
+- At step 10, account is disabled
+- System shows "Your account has been disabled"
+- Use case ends
+
+### A3: Empty Fields
+- At step 9, fields empty
+- System highlights empty fields
+- Return to step 6
+
+### A4: Network Error
+- At step 9, network fails
+- System shows "Please check your connection"
+- Return to step 8
+
+### A5: Forgot Password
+- At step 8, student taps "Forgot Password"
+- System redirects to Password Reset flow
+- Use case ends
+
+### A6: New User Signup
+- At step 5, student taps "Sign Up"
+- System redirects to Signup flow (UC-01)
+- Use case ends
+
+## Exceptions
+
+- E1: Firebase Auth unreachable - show error message
+- E2: Multiple failed attempts - temporary lockout
+- E3: FCM token registration fails - continue without push
+
+## Business Rules
+
+- BR-01: Email must be registered
+- BR-02: Password must match
+- BR-03: Account must be active
+- BR-04: 5 failed attempts = 15 min lockout
+- BR-05: Session persists for 30 days
+
+## Non-Functional Requirements
+
+- Login completes in < 3 seconds
+- Session persists for 30 days
+- Credentials sent over HTTPS only
+
+## Related Use Cases
+
+- UC-01: Student Signup
+- UC-03: Browse Events
+- UC-08: View My Events
+
+## UI Reference
+
+Screens: Splash, Login, Home
+
+## Use Case Diagram
+
+![UC-02 Login Diagram](diagrams/UC-02_Login.png)
+
+---
+
+Document Version: 1.0
+Last Updated: [Aaj ki date]
+Author: [Aapka naam]
+Status: Draft

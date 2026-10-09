@@ -1,0 +1,132 @@
+# Appendix C: To Be Determined (TBD) List
+
+## C.1 Overview
+
+This appendix lists items marked as "To Be Determined" (TBD) in the 
+CampusConnect SRS. These are areas requiring further clarification, 
+decisions, or research before or during implementation.
+
+## C.2 TBD Items
+
+### TBD-01: Push Notification Provider
+Status: OPEN
+Priority: High
+Decision By: Sprint 4
+Owner: Development Team
+
+### TBD-02: Certificate Template Design
+Status: OPEN
+Priority: Medium
+Decision By: Sprint 7
+Owner: Admin + Design
+
+### TBD-03: Event Categories Finalization
+Status: OPEN
+Priority: Medium
+Decision By: Sprint 5
+Owner: Admin
+
+### TBD-04: Password Policy Details
+Status: OPEN
+Priority: High
+Decision By: Sprint 1
+Owner: Security Team
+
+### TBD-05: Data Retention Periods
+Status: OPEN
+Priority: Medium
+Decision By: Sprint 1
+Owner: Admin + Legal
+
+### TBD-06: Offline Mode Scope
+Status: OPEN
+Priority: Medium
+Decision By: Sprint 3
+Owner: Development Team
+
+### TBD-07: Analytics Integration
+Status: OPEN
+Priority: Low
+Decision By: Sprint 6
+Owner: Development Team
+
+### TBD-08: Multiple Language Support
+Status: OPEN (Deferred to v2.0)
+Priority: Low
+Owner: Admin
+
+### TBD-09: Rate Limiting Rules
+Status: OPEN
+Priority: Medium
+Decision By: Sprint 4
+Owner: Development Team
+
+### TBD-10: Backup Schedule
+Status: OPEN
+Priority: Medium
+Decision By: Sprint 8
+Owner: Admin + Dev Team
+
+### TBD-11: User Onboarding Flow
+Status: OPEN
+Priority: Medium
+Decision By: Sprint 2
+Owner: Design Team
+
+### TBD-12: Event Photos Feature Details
+Status: OPEN
+Priority: Low
+Decision By: Sprint 7
+Owner: Admin
+
+### TBD-13: Refund/Cancellation Policy
+Status: OPEN (Future)
+Priority: Low
+Owner: Admin
+
+### TBD-14: Integration with University ERP
+Status: OPEN (Future)
+Priority: Low
+Owner: Admin + IT
+
+### TBD-15: Multi-Tenant Support
+Status: OPEN (Future)
+Priority: Low
+Owner: Sponsor
+
+## C.3 Summary Table
+
+| ID | Item | Priority | Owner | By |
+|----|------|----------|-------|-----|
+| TBD-01 | Push Notification Provider | High | Dev | Sprint 4 |
+| TBD-02 | Certificate Template | Medium | Admin | Sprint 7 |
+| TBD-03 | Event Categories | Medium | Admin | Sprint 5 |
+| TBD-04 | Password Policy | High | Security | Sprint 1 |
+| TBD-05 | Data Retention | Medium | Legal | Sprint 1 |
+| TBD-06 | Offline Mode | Medium | Dev | Sprint 3 |
+| TBD-07 | Analytics | Low | Dev | Sprint 6 |
+| TBD-08 | Multi-Language | Low | Admin | End |
+| TBD-09 | Rate Limiting | Medium | Dev | Sprint 4 |
+| TBD-10 | Backup Schedule | Medium | Admin | Sprint 8 |
+| TBD-11 | Onboarding Flow | Medium | Design | Sprint 2 |
+| TBD-12 | Event Photos | Low | Admin | Sprint 7 |
+| TBD-13 | Refund Policy | Low | Admin | Future |
+| TBD-14 | ERP Integration | Low | Admin | Future |
+| TBD-15 | Multi-Tenant | Low | Sponsor | Future |
+
+## C.4 Resolution Process
+
+Each TBD item will be resolved through:
+1. Identification
+2. Research
+3. Discussion with stakeholders
+4. Decision by owner
+5. Documentation
+6. Implementation
+
+---
+
+Document Version: 1.0
+Last Updated: [Aaj ki date]
+Author: [Aapka naam]
+Status: Draft

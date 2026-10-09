@@ -1,0 +1,411 @@
+# 2. Database Design
+
+## 2.1 Overview
+
+CampusConnect uses Cloud Firestore as the primary database. This 
+document defines all collections, fields, relationships, and 
+indexes needed for implementation.
+
+## 2.2 Database Type
+
+Type: NoSQL Document Database
+Provider: Google Cloud Firestore
+Structure: Collections > Documents > Fields
+
+Why Firestore:
+- Real-time synchronization
+- Offline support (cached)
+- Auto-scaling
+- Free tier sufficient
+- Easy Flutter integration
+
+## 2.3 Collections Overview
+
+Total Collections: 8
+
+1. users          - User accounts (all roles)
+2. events         - Event information
+3. registrations  - Student event registrations
+4. announcements  - Official announcements
+5. attendance     - Event attendance records
+6. feedback       - Student feedback
+7. societies      - Society/club information
+8. certificates   - Generated certificates
+
+## 2.4 Collection: users
+
+Purpose: Store user account information
+
+Document ID: Firebase Auth UID (auto)
+
+Fields:
+
+| Field | Type | Required | Default | Description |
+|-------|------|----------|---------|-------------|
+| uid | string | Yes | - | Firebase Auth UID |
+| name | string | Yes | - | Full name |
+| email | string | Yes | - | Email (unique) |
+| role | string | Yes | "student" | student/organizer/admin |
+| studentId | string | No | "" | University ID |
+| department | string | No | "" | Department |
+| profileImage | string | No | "" | Image URL |
+| fcmToken | string | No | "" | Push token |
+| isActive | boolean | Yes | true | Account status |
+| createdAt | timestamp | Yes | now | Creation time |
+| updatedAt | timestamp | No | - | Last update |
+
+Example Document:
+{
+  "uid": "abc123xyz",
+  "name": "Ali Khan",
+  "email": "ali.khan@university.edu",
+  "role": "student",
+  "studentId": "CS-2021-045",
+  "department": "Computer Science",
+  "profileImage": "",
+  "fcmToken": "",
+  "isActive": true,
+  "createdAt": Timestamp,
+  "updatedAt": Timestamp
+}
+
+Indexes:
+- email (ascending, unique)
+- role + isActive (composite)
+
+## 2.5 Collection: events
+
+Purpose: Store event information
+
+Document ID: Auto-generated
+
+Fields:
+
+| Field | Type | Required | Default | Description |
+|-------|------|----------|---------|-------------|
+| eventId | string | Yes | - | Event ID |
+| title | string | Yes | - | Event title |
+| description | string | Yes | - | Full description |
+| category | string | Yes | - | Category |
+| date | timestamp | Yes | - | Event date |
+| time | string | Yes | - | Time (10:00 AM) |
+| venue | string | Yes | - | Location |
+| capacity | number | Yes | 100 | Max attendees |
+| registeredCount | number | Yes | 0 | Current count |
+| organizerId | string | Yes | - | Organizer UID |
+| organizerName | string | Yes | - | Organizer name |
+| posterUrl | string | No | "" | Poster URL |
+| speaker | string | No | "" | Speaker info |
+| registrationDeadline | timestamp | Yes | - | Last date |
+| status | string | Yes | "pending" | Status |
+| rejectionReason | string | No | "" | If rejected |
+| approvedBy | string | No | "" | Admin UID |
+| approvedAt | timestamp | No | - | Approval time |
+| createdAt | timestamp | Yes | now | Creation time |
+| updatedAt | timestamp | No | - | Update time |
+
+Status Values:
+- "pending"   - Waiting for admin approval
+- "approved"  - Published to students
+- "rejected"  - Rejected by admin
+- "completed" - Event ended
+
+Example Document:
+{
+  "eventId": "evt_abc123",
+  "title": "AI & Future Technology Seminar",
+  "description": "Join us for...",
+  "category": "Seminar",
+  "date": Timestamp,
+  "time": "10:00 AM",
+  "venue": "Main Auditorium",
+  "capacity": 100,
+  "registeredCount": 78,
+  "organizerId": "user_xyz",
+  "organizerName": "CS Department",
+  "posterUrl": "https://...",
+  "speaker": "Dr. Ahmed Khan",
+  "registrationDeadline": Timestamp,
+  "status": "approved",
+  "createdAt": Timestamp
+}
+
+Indexes:
+- status + date (composite)
+- category + status (composite)
+- organizerId + status (composite)
+
+## 2.6 Collection: registrations
+
+Purpose: Store event registrations
+
+Document ID: Auto-generated
+
+Fields:
+
+| Field | Type | Required | Description |
+|-------|------|----------|-------------|
+| regId | string | Yes | Registration ID |
+| eventId | string | Yes | Event reference |
+| eventTitle | string | Yes | Cached title |
+| studentId | string | Yes | Student UID |
+| studentName | string | Yes | Cached name |
+| studentEmail | string | Yes | Cached email |
+| studentNumber | string | Yes | Cached student ID |
+| status | string | Yes | registered/attended/cancelled |
+| qrCode | string | Yes | Unique QR code |
+| registeredAt | timestamp | Yes | Registration time |
+| attendedAt | timestamp | No | Attendance time |
+| cancelledAt | timestamp | No | Cancel time |
+
+Example:
+{
+  "regId": "reg_xyz789",
+  "eventId": "evt_abc123",
+  "eventTitle": "AI Seminar",
+  "studentId": "user_abc",
+  "studentName": "Ali Khan",
+  "studentEmail": "ali@uni.edu",
+  "studentNumber": "CS-2021-045",
+  "status": "registered",
+  "qrCode": "CC-aBcD1234EfGh",
+  "registeredAt": Timestamp
+}
+
+Indexes:
+- eventId + status (composite)
+- studentId + status (composite)
+- qrCode (unique)
+
+## 2.7 Collection: announcements
+
+Purpose: Store official announcements
+
+Document ID: Auto-generated
+
+Fields:
+
+| Field | Type | Required | Description |
+|-------|------|----------|-------------|
+| annId | string | Yes | Announcement ID |
+| title | string | Yes | Title |
+| description | string | Yes | Content |
+| category | string | Yes | Category |
+| priority | string | Yes | low/medium/high |
+| createdBy | string | Yes | Creator UID |
+| createdByName | string | Yes | Creator name |
+| targetEventId | string | No | Event ID (optional) |
+| createdAt | timestamp | Yes | Creation time |
+
+Category Values:
+- "University"  - University-wide
+- "Department"  - Department-specific
+- "Society"     - Society-specific
+- "Academic"    - Academic matters
+- "Event"       - Event-related
+- "Important"   - Important notices
+
+Indexes:
+- category + createdAt (composite)
+- createdAt (descending)
+
+## 2.8 Collection: attendance
+
+Purpose: Store attendance records
+
+Document ID: Auto-generated
+
+Fields:
+
+| Field | Type | Required | Description |
+|-------|------|----------|-------------|
+| attId | string | Yes | Attendance ID |
+| eventId | string | Yes | Event reference |
+| studentId | string | Yes | Student reference |
+| regId | string | Yes | Registration ref |
+| scannedBy | string | Yes | Organizer UID |
+| scannedAt | timestamp | Yes | Scan time |
+| status | string | Yes | present/absent |
+
+Indexes:
+- eventId + studentId (composite, unique)
+- eventId + status (composite)
+
+## 2.9 Collection: feedback
+
+Purpose: Store event feedback
+
+Document ID: Auto-generated
+
+Fields:
+
+| Field | Type | Required | Description |
+|-------|------|----------|-------------|
+| fbId | string | Yes | Feedback ID |
+| eventId | string | Yes | Event reference |
+| studentId | string | Yes | Student reference |
+| studentName | string | Yes | Cached name |
+| rating | number | Yes | 1-5 stars |
+| comment | string | No | Optional |
+| createdAt | timestamp | Yes | Submission time |
+| updatedAt | timestamp | No | Edit time |
+
+Indexes:
+- eventId + rating (composite)
+- studentId + eventId (composite, unique)
+
+## 2.10 Collection: societies
+
+Purpose: Store society information
+
+Document ID: Auto-generated
+
+Fields:
+
+| Field | Type | Required | Description |
+|-------|------|----------|-------------|
+| societyId | string | Yes | Society ID |
+| name | string | Yes | Name (unique) |
+| description | string | Yes | Description |
+| logoUrl | string | No | Logo URL |
+| status | string | Yes | active/pending/disabled |
+| headOrganizerId | string | No | Main organizer |
+| memberCount | number | Yes | Total members |
+| createdBy | string | Yes | Admin UID |
+| createdAt | timestamp | Yes | Creation time |
+
+Indexes:
+- name (unique)
+- status
+
+## 2.11 Collection: certificates
+
+Purpose: Store certificates
+
+Document ID: Auto-generated
+
+Fields:
+
+| Field | Type | Required | Description |
+|-------|------|----------|-------------|
+| certId | string | Yes | Certificate ID |
+| certificateNumber | string | Yes | Human-readable ID |
+| eventId | string | Yes | Event reference |
+| eventTitle | string | Yes | Cached title |
+| studentId | string | Yes | Student reference |
+| studentName | string | Yes | Cached name |
+| certificateUrl | string | Yes | PDF URL |
+| issuedAt | timestamp | Yes | Issue date |
+| downloadedAt | timestamp | No | Last download |
+
+Indexes:
+- studentId
+- eventId
+- certificateNumber (unique)
+
+## 2.12 Data Relationships
+
+users (student) 1:N registrations
+users (student) 1:N feedback
+users (organizer) 1:N events
+events 1:N registrations
+events 1:N attendance
+events 1:N feedback
+events 1:N certificates
+societies 1:N users (organizers)
+
+## 2.13 Firestore Security Rules
+
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    
+    function isSignedIn() {
+      return request.auth != null;
+    }
+    
+    function getUserRole() {
+      return get(/databases/$(database)/documents/users/$(request.auth.uid)).data.role;
+    }
+    
+    // Users
+    match /users/{userId} {
+      allow read: if isSignedIn();
+      allow write: if isSignedIn() && request.auth.uid == userId;
+    }
+    
+    // Events
+    match /events/{eventId} {
+      allow read: if isSignedIn();
+      allow create: if isSignedIn() && 
+                    (getUserRole() == 'organizer' || getUserRole() == 'admin');
+      allow update, delete: if isSignedIn() && 
+                    (getUserRole() == 'admin' || 
+                     resource.data.organizerId == request.auth.uid);
+    }
+    
+    // Registrations
+    match /registrations/{regId} {
+      allow read: if isSignedIn();
+      allow create: if isSignedIn();
+      allow update: if isSignedIn() && getUserRole() == 'organizer';
+    }
+    
+    // Announcements
+    match /announcements/{annId} {
+      allow read: if isSignedIn();
+      allow write: if isSignedIn() && 
+                    (getUserRole() == 'organizer' || getUserRole() == 'admin');
+    }
+    
+    // Attendance
+    match /attendance/{attId} {
+      allow read: if isSignedIn();
+      allow write: if isSignedIn() && 
+                    (getUserRole() == 'organizer' || getUserRole() == 'admin');
+    }
+    
+    // Feedback
+    match /feedback/{fbId} {
+      allow read: if isSignedIn();
+      allow create: if isSignedIn();
+    }
+    
+    // Societies
+    match /societies/{socId} {
+      allow read: if isSignedIn();
+      allow write: if isSignedIn() && getUserRole() == 'admin';
+    }
+    
+    // Certificates
+    match /certificates/{certId} {
+      allow read: if isSignedIn();
+      allow write: if isSignedIn() && getUserRole() == 'admin';
+    }
+  }
+}
+
+## 2.14 Storage Structure
+
+Firebase Storage paths:
+
+/event_posters/{eventId}.jpg
+/profile_images/{userId}.jpg
+/event_photos/{eventId}/{photoId}.jpg
+/certificates/{certId}.pdf
+
+## 2.15 Implementation Order
+
+Day 2: Create all 8 collections in Firebase Console
+Day 3: users collection (from signup)
+Day 4: events + registrations collections
+Day 5: announcements collection
+Day 6: attendance + feedback collections
+Day 7: certificates + societies collections
+
+---
+
+Document Version: 1.0
+Last Updated: [Aaj ki date]
+Author: [Aapka naam]
+Status: Draft

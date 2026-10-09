@@ -1,0 +1,113 @@
+# UC-15: Scan QR for Attendance
+
+## Use Case Information
+
+| Field | Value |
+|-------|-------|
+| Use Case ID | UC-15 |
+| Use Case Name | Scan QR for Attendance |
+| Actor | Organizer |
+| Priority | High |
+| Complexity | Medium |
+
+## Description
+
+An organizer scans student QR codes at the event entrance to mark attendance automatically.
+
+## Preconditions
+
+1. Organizer is logged in
+2. Event is in progress or today
+3. Camera permission granted
+4. Internet connection available
+
+## Postconditions
+
+1. Attendance recorded in Firestore
+2. Student marked as "attended"
+3. Organizer sees confirmation
+
+## Main Flow
+
+1. Organizer opens dashboard
+2. Organizer selects event
+3. Organizer clicks "Scan QR"
+4. System activates camera
+5. Student shows QR code
+6. Organizer scans QR
+7. System decodes QR data
+8. System validates:
+   - QR is valid
+   - Registration exists
+   - Registration is for this event
+   - Not already marked
+9. System marks attendance
+10. System shows green confirmation with student name
+11. Organizer scans next student
+
+## Alternative Flows
+
+### A1: Invalid QR
+- At step 8, QR not recognized
+- System shows red "Invalid QR" + beep
+- Return to step 5
+
+### A2: Already Marked
+- At step 8, already marked
+- System shows yellow "Already marked"
+- Return to step 5
+
+### A3: Wrong Event
+- At step 8, QR is for different event
+- System shows red "Wrong event"
+- Return to step 5
+
+### A4: Registration Cancelled
+- At step 8, registration cancelled
+- System shows red "Registration cancelled"
+
+### A5: Camera Permission Denied
+- At step 4, permission denied
+- System shows "Camera access required"
+- Use case ends
+
+## Exceptions
+
+- E1: Camera error - show retry
+- E2: Network error - queue locally, sync later
+- E3: Duplicate scan within 5 seconds - ignore
+
+## Business Rules
+
+- BR-01: One attendance per student per event
+- BR-02: Only valid registrations accepted
+- BR-03: Cannot mark attendance for cancelled registration
+- BR-04: Cannot mark attendance for wrong event
+- BR-05: Attendance can be marked only during event day
+
+## Non-Functional Requirements
+
+- Scan completes in < 2 seconds
+- Works with poor lighting
+- Beep sound on success/failure
+- Shows student name after scan
+
+## Related Use Cases
+
+- UC-07: View QR Ticket (Student)
+- UC-16: View Statistics
+
+## UI Reference
+
+Screens: QR Scanner
+
+## Use Case Diagram
+
+![UC-15 Scan QR Attendance Diagram](diagrams/UC-15_Scan_QR_Attendance.png)
+
+---
+
+Document Version: 1.0
+Last Updated: [Aaj ki date]
+Author: [Aapka naam]
+Status: Draft

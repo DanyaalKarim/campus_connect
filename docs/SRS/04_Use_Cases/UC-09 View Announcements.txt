@@ -1,0 +1,89 @@
+# UC-09: View Announcements
+
+## Use Case Information
+
+| Field | Value |
+|-------|-------|
+| Use Case ID | UC-09 |
+| Use Case Name | View Announcements |
+| Actor | Student |
+| Priority | High |
+| Complexity | Low |
+
+## Description
+
+A student views official announcements from university, departments, and societies. This replaces WhatsApp group communication with a centralized platform.
+
+## Preconditions
+
+1. Student is logged in
+2. At least one announcement exists
+
+## Postconditions
+
+1. Announcements list displayed
+2. Student can read full announcements
+
+## Main Flow
+
+1. Student opens app
+2. Student taps "News" tab in bottom nav
+3. System fetches announcements from Firestore
+4. System displays announcements sorted by date (newest first)
+5. Each announcement shows:
+   - Title
+   - Description preview
+   - Category badge
+   - Date and source
+6. Student taps announcement to read full
+
+## Alternative Flows
+
+### A1: No Announcements
+- System shows "No announcements"
+
+### A2: Filter by Category
+- Student selects category (University, Department, Society, Academic, Event, Important)
+- System filters announcements
+
+### A3: Read Full
+- Student taps announcement
+- System shows full description
+- System shows source and timestamp
+
+## Exceptions
+
+- E1: Network error - show cached announcements
+- E2: Firestore error - show retry
+
+## Business Rules
+
+- BR-01: Sort by date descending
+- BR-02: Show category badge with color
+- BR-03: Show source (University/Department/Society)
+- BR-04: Mark important announcements with badge
+
+## Non-Functional Requirements
+
+- List loads in < 1.5 seconds
+- Push notification for important announcements
+
+## Related Use Cases
+
+- UC-17: Send Announcement (Organizer)
+- UC-07: Send University Announcements (Admin)
+
+## UI Reference
+
+Screens: Announcements List, Announcement Details
+
+## Use Case Diagram
+
+![UC-09 View Announcements Diagram](diagrams/UC-09_View_Announcements.png)
+
+---
+
+Document Version: 1.0
+Last Updated: [Aaj ki date]
+Author: [Aapka naam]
+Status: Draft

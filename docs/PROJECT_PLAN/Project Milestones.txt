@@ -1,0 +1,118 @@
+# Project Milestones
+
+## Milestone Overview
+
+| # | Milestone | Day | Criteria |
+|---|-----------|-----|----------|
+| 1 | Planning Complete | Day 1 | Project Plan + SDD done |
+| 2 | Environment Ready | Day 2 | Firebase + Flutter set up |
+| 3 | Auth Working | Day 3 | Login/Signup functional |
+| 4 | Core Features Ready | Day 5 | Events, QR, Admin working |
+| 5 | Testing Complete | Day 7 | All features tested |
+| 6 | Documentation Complete | Day 8 | All docs done |
+| 7 | Deployed | Day 9 | APK + Web live |
+
+## Milestone Details
+
+### Milestone 1: Planning Complete (Day 1)
+
+Deliverables:
+- Project Plan (4 files)
+- SDD (5 files)
+
+Success Criteria:
+- Both documents written
+- Reviewed for completeness
+
+---
+
+### Milestone 2: Environment Ready (Day 2)
+
+Deliverables:
+- Firebase project with services
+- Flutter project configured
+- Folder structure
+- Theme + constants
+
+Success Criteria:
+- Flutter app runs on emulator
+- Firebase connected
+
+---
+
+### Milestone 3: Auth Working (Day 3)
+
+Deliverables:
+- Splash, Login, Signup screens
+- Home screen
+- Bottom navigation
+
+Success Criteria:
+- User can signup and login
+- Data saved in Firestore
+- Redirects work
+
+---
+
+### Milestone 4: Core Features Ready (Day 5)
+
+Deliverables:
+- Events list + details
+- Registration flow
+- QR ticket
+- Announcements
+- Admin panel basic
+
+Success Criteria:
+- Student can register for event
+- QR ticket generated
+- Admin can create event
+
+---
+
+### Milestone 5: Testing Complete (Day 7)
+
+Deliverables:
+- Test results
+- Bug fixes
+- Polished UI
+
+Success Criteria:
+- All features tested
+- No critical bugs
+- Works on real device
+
+---
+
+### Milestone 6: Documentation Complete (Day 8)
+
+Deliverables:
+- Test Plan
+- User Manuals (3)
+- Deployment Guide
+- Final Report
+
+Success Criteria:
+- All documents complete
+- Ready for submission
+
+---
+
+### Milestone 7: Deployed (Day 9)
+
+Deliverables:
+- APK file
+- Web dashboard URL
+- Presentation
+
+Success Criteria:
+- APK installs on device
+- Web dashboard loads
+- Everything works
+
+---
+
+Document Version: 1.0
+Last Updated: [Aaj ki date]
+Author: [Aapka naam]
+Status: Draft

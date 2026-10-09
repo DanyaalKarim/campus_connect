@@ -1,0 +1,101 @@
+# UC-18: Admin Login
+
+## Use Case Information
+
+| Field | Value |
+|-------|-------|
+| Use Case ID | UC-18 |
+| Use Case Name | Admin Login |
+| Actor | Admin |
+| Priority | High |
+| Complexity | Low |
+
+## Description
+
+A university administrator logs into the admin dashboard to manage the platform, approve events, and manage users.
+
+## Preconditions
+
+1. Admin has an existing account
+2. Admin is on the admin dashboard URL
+3. Internet connection available
+
+## Postconditions
+
+1. Admin authenticated
+2. Session created
+3. Admin redirected to Admin Dashboard
+
+## Main Flow
+
+1. Admin opens admin dashboard URL
+2. System shows login screen
+3. Admin enters email
+4. Admin enters password
+5. Admin clicks "Login"
+6. System validates with Firebase Auth
+7. System retrieves user role
+8. System verifies role = "admin"
+9. System redirects to Admin Dashboard
+
+## Alternative Flows
+
+### A1: Invalid Credentials
+- At step 6, credentials invalid
+- System shows "Invalid email or password"
+- Return to step 3
+
+### A2: Wrong Role
+- At step 8, user is not admin
+- System shows "Access denied"
+- Use case ends
+
+### A3: Account Disabled
+- At step 7, account disabled
+- System shows "Account disabled"
+- Use case ends
+
+### A4: Session Expired
+- Admin session expired
+- Redirect to login
+- Use case ends
+
+## Exceptions
+
+- E1: Firebase Auth unreachable
+- E2: Network timeout
+- E3: Suspicious activity detected
+
+## Business Rules
+
+- BR-01: Only role="admin" can access
+- BR-02: Account must be active
+- BR-03: Session persists for 7 days (shorter than students)
+- BR-04: Two-factor authentication recommended
+
+## Non-Functional Requirements
+
+- Login completes in < 3 seconds
+- Session secured with HTTPS
+- Automatic logout after 2 hours inactivity
+
+## Related Use Cases
+
+- UC-19: Approve Event
+- UC-20: Reject Event
+- UC-21: Manage Users
+
+## UI Reference
+
+Screens: Admin Login, Admin Dashboard
+
+## Use Case Diagram
+
+![UC-18 Admin Login Diagram](diagrams/UC-18_Admin_Login.png)
+
+---
+
+Document Version: 1.0
+Last Updated: [Aaj ki date]
+Author: [Aapka naam]
+Status: Draft

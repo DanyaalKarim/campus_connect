@@ -1,0 +1,100 @@
+# UC-12: Organizer Login
+
+## Use Case Information
+
+| Field | Value |
+|-------|-------|
+| Use Case ID | UC-12 |
+| Use Case Name | Organizer Login |
+| Actor | Organizer |
+| Priority | High |
+| Complexity | Low |
+
+## Description
+
+An organizer logs into the web dashboard to manage events, view registrations, scan QR codes, and send announcements.
+
+## Preconditions
+
+1. Organizer has an approved account
+2. Organizer is on the web dashboard
+3. Internet connection available
+
+## Postconditions
+
+1. Organizer authenticated
+2. Session created
+3. Organizer redirected to Organizer Dashboard
+
+## Main Flow
+
+1. Organizer opens web dashboard URL
+2. System shows login screen
+3. Organizer enters email
+4. Organizer enters password
+5. Organizer taps "Login"
+6. System validates credentials with Firebase Auth
+7. System retrieves user role
+8. System verifies role = "organizer"
+9. System redirects to Organizer Dashboard
+
+## Alternative Flows
+
+### A1: Invalid Credentials
+- At step 6, credentials invalid
+- System shows "Invalid email or password"
+- Return to step 3
+
+### A2: Wrong Role
+- At step 8, user is not organizer
+- System shows "Access denied"
+- Use case ends
+
+### A3: Account Disabled
+- At step 7, account disabled
+- System shows "Account disabled"
+- Use case ends
+
+### A4: Account Pending Approval
+- At step 7, account pending
+- System shows "Account pending admin approval"
+- Use case ends
+
+## Exceptions
+
+- E1: Firebase Auth error
+- E2: Network timeout
+- E3: Session conflict
+
+## Business Rules
+
+- BR-01: Only approved organizers can login
+- BR-02: Role must be "organizer"
+- BR-03: Account must be active
+- BR-04: Session persists for 30 days
+
+## Non-Functional Requirements
+
+- Login completes in < 3 seconds
+- Session persists for 30 days
+- All communication HTTPS
+
+## Related Use Cases
+
+- UC-13: Create Event
+- UC-15: Scan QR Attendance
+
+## UI Reference
+
+Screens: Login, Organizer Dashboard
+
+## Use Case Diagram
+
+![UC-12 Organizer Login Diagram](diagrams/UC-12_Organizer_Login.png)
+
+---
+
+Document Version: 1.0
+Last Updated: [Aaj ki date]
+Author: [Aapka naam]
+Status: Draft

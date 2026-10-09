@@ -1,0 +1,82 @@
+# Project Plan Overview
+
+## Project Information
+
+| Field | Value |
+|-------|-------|
+| Project Name | CampusConnect |
+| Project Type | Mobile Application Development |
+| Team Size | 2 developers |
+| Duration | 9 days (intensive sprint) |
+| Start Date | 10/10/2026 |
+| End Date | 19/10/2026|
+
+## Project Goal
+
+Build a complete university event management platform with:
+- Student Android app (Flutter)
+- Admin web dashboard (Flutter Web)
+- Firebase backend
+
+## Success Criteria
+
+- Working MVP with core features
+- Documentation complete
+- APK ready for deployment
+- Web dashboard live
+
+## Scope (MVP - 9 Day Version)
+
+### Included Features:
+- Authentication (Login/Signup)
+- Events (Browse, Details, Register)
+- QR Ticket generation
+- My Events
+- Announcements
+- Admin: Create/Approve Events
+
+### Excluded Features (Future versions):
+- Push Notifications
+- Certificates
+- Feedback
+- Event Photos
+- Advanced Analytics
+
+## Daily Commitment
+
+- 10-12 hours per day
+- Full focus, no distractions
+
+## Deliverables
+
+| # | Deliverable | Day |
+|---|-------------|-----|
+| 1 | Project Plan | Day 1 |
+| 2 | SDD | Day 1 |
+| 3 | Firebase Setup | Day 2 |
+| 4 | Authentication | Day 3 |
+| 5 | Events + Registration | Day 4 |
+| 6 | QR + Admin Panel | Day 5 |
+| 7 | Testing + Bug Fixes | Day 6-7 |
+| 8 | Documentation | Day 8 |
+| 9 | Deployment | Day 9 |
+
+## Constraints
+
+- Time: 9 days only
+- Team: 2 developers
+- Budget: Free tier (Firebase Spark Plan)
+- Devices: Emulator + Real device
+
+## Assumptions
+
+- Firebase free tier is sufficient
+- Internet is stable
+- No major scope changes
+
+---
+
+Document Version: 1.0
+Last Updated: 10/10/2026
+Author: Danyaal Karim
+Status: Draft

@@ -1,0 +1,115 @@
+# UC-22: Manage Societies
+
+## Use Case Information
+
+| Field | Value |
+|-------|-------|
+| Use Case ID | UC-22 |
+| Use Case Name | Manage Societies |
+| Actor | Admin |
+| Priority | High |
+| Complexity | Medium |
+
+## Description
+
+An admin manages student societies (clubs and organizations) on the platform, including adding new societies, approving pending ones, and disabling inactive societies.
+
+## Preconditions
+
+1. Admin is logged in
+
+## Postconditions
+
+1. Society records updated in Firestore
+2. Society status reflected across platform
+3. Associated organizers notified
+
+## Main Flow
+
+1. Admin opens admin dashboard
+2. Admin clicks "Manage Societies"
+3. System displays society list with:
+   - Society name
+   - Description
+   - Status (Active/Pending/Disabled)
+   - Member count
+   - Created date
+4. Admin can:
+   - Add new society
+   - Approve pending society
+   - Disable active society
+   - View society details
+   - Edit society info
+5. Admin selects an action
+6. System processes action
+7. System shows confirmation
+8. System updates Firestore
+
+## Alternative Flows
+
+### A1: Add New Society
+- Admin clicks "Add Society"
+- System shows form
+- Admin enters name and description
+- System validates uniqueness
+- System creates society (status: active)
+- System confirms
+
+### A2: Approve Pending Society
+- Admin selects pending society
+- Admin clicks "Approve"
+- System updates status to "active"
+- Organizer notified
+
+### A3: Disable Society
+- Admin selects active society
+- Admin clicks "Disable"
+- System shows confirmation
+- Admin confirms
+- System updates status to "disabled"
+- Society cannot create new events
+
+### A4: No Societies
+- System shows "No societies yet"
+- Use case ends
+
+## Exceptions
+
+- E1: Firestore error - retry
+- E2: Duplicate society name - show error
+- E3: Cannot disable society with active events
+
+## Business Rules
+
+- BR-01: Society name must be unique
+- BR-02: Only admin can add/approve/disable
+- BR-03: Disabled societies cannot create events
+- BR-04: Existing events of disabled society remain
+- BR-05: Society can be re-enabled anytime
+- BR-06: All actions logged
+
+## Non-Functional Requirements
+
+- Society list loads in < 2 seconds
+- Search results in < 500 ms
+- Pagination for 50+ societies
+
+## Related Use Cases
+
+- UC-21: Manage Users
+- UC-13: Create Event (Organizer)
+
+## UI Reference
+
+Screens: Societies List, Society Details, Add Society Form
+
+## Use Case Diagram
+
+![UC-22 Manage Societies Diagram](diagrams/UC-22_Manage_Societies.png)
+
+---
+
+Document Version: 1.0
+Last Updated: [Aaj ki date]
+Author: [Aapka naam]
+Status: Draft

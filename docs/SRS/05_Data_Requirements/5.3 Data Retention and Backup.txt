@@ -1,0 +1,286 @@
+# 5.3 Data Retention and Backup
+
+## 5.3.1 Overview
+
+This section describes how CampusConnect manages data retention, backup, and deletion. It defines the lifecycle of data from creation to eventual deletion, ensuring compliance with data privacy requirements.
+
+## 5.3.2 Data Retention Policy
+
+### Active Data (Retained Indefinitely)
+
+Data that remains actively useful is retained indefinitely:
+
+- User accounts (until deletion requested)
+- Active events (until event completes)
+- Current registrations
+- Recent announcements (last 2 years)
+- Active societies
+- Valid certificates
+
+### Historical Data (Retained with Policy)
+
+Data that is historical but may be needed for records:
+
+| Data Type | Retention Period | Notes |
+|-----------|-----------------|-------|
+| Completed events | 5 years | For records |
+| Past registrations | 3 years | For analytics |
+| Attendance records | 3 years | For verification |
+| Feedback | 2 years | For quality analysis |
+| Old announcements | 2 years | Then archived |
+| Inactive societies | 5 years | For records |
+| Issued certificates | Permanent | Never deleted |
+
+### Deletable Data
+
+Data that can be deleted under specific conditions:
+
+| Data Type | Deletion Trigger |
+|-----------|------------------|
+| Disabled user account | Manual request + 30 days |
+| Cancelled registration | Immediately (if before deadline) |
+| Rejected events | After 6 months |
+| Deleted announcements | Immediately by admin |
+
+## 5.3.3 Data Backup Policy
+
+### Automated Backups
+
+Firestore provides automated backups:
+
+- Frequency: Daily automatic backups
+- Retention: 30 days for daily backups
+- Weekly backups: Retained 12 weeks
+- Monthly backups: Retained 12 months
+
+### Manual Backups
+
+Admins can create manual backups:
+
+- Before major changes
+- Before semester start
+- Before system updates
+
+### Backup Storage
+
+- Backups stored in Google Cloud Storage
+- Encrypted at rest (AES-256)
+- Encrypted in transit (TLS)
+- Geographic redundancy enabled
+
+## 5.3.4 Data Recovery
+
+### Point-in-Time Recovery
+
+Firestore supports point-in-time recovery:
+
+- Recovery window: Last 30 days
+- Recovery granularity: Per minute
+- Recovery time: < 1 hour
+
+### Recovery Procedure
+
+1. Admin identifies data loss
+2. Admin contacts Firebase support (if needed)
+3. Admin selects recovery point
+4. System restores data
+5. Admin verifies restoration
+6. Admin notifies affected users
+
+## 5.3.5 User Data Rights
+
+### Right to Access
+
+Users can view all their data:
+- Profile information
+- Event registrations
+- Attendance history
+- Certificates
+- Feedback submitted
+
+### Right to Rectification
+
+Users can edit:
+- Name
+- Profile image
+- Department
+- (Cannot edit: student ID, email)
+
+### Right to Erasure
+
+Users can request account deletion:
+
+- Request via Profile → Settings
+- Confirmation email sent
+- 30-day waiting period
+- Data permanently deleted after 30 days
+- Exception: Certificates retained for records
+
+### Right to Data Portability
+
+Users can request data export:
+- Formats: JSON, CSV
+- Includes: Profile, registrations, attendance, feedback
+- Delivery: Email within 7 days
+
+## 5.3.6 Data Privacy Compliance
+
+### Compliance Standards
+
+CampusConnect complies with:
+- University data policy
+- Firebase Terms of Service
+- Google Cloud data protection
+- General data protection principles
+
+### Data Minimization
+
+Only collect necessary data:
+- Required for functionality
+- No excessive personal info
+- No sensitive data (religion, health, etc.)
+
+### Data Encryption
+
+- At rest: AES-256 (Firebase default)
+- In transit: TLS 1.2+
+- Passwords: Hashed by Firebase Auth
+- API keys: Environment variables
+
+### Data Access Control
+
+- Role-based access (Firestore Rules)
+- Admin approval for sensitive actions
+- Audit logs for admin actions
+- Regular access reviews
+
+## 5.3.7 Data Deletion Procedure
+
+### User-Requested Deletion
+
+1. User submits deletion request
+2. System sends confirmation email
+3. User confirms deletion
+4. System marks account for deletion
+5. 30-day grace period begins
+6. User can cancel deletion anytime
+7. After 30 days:
+   - Account deleted
+   - Personal data removed
+   - Certificates anonymized
+   - Registration records anonymized
+
+### Admin-Initiated Deletion
+
+1. Admin selects account
+2. Admin enters reason
+3. System confirms action
+4. Account immediately disabled
+5. Deletion after 30 days
+
+### Automatic Deletion
+
+The system automatically deletes:
+- Rejected events after 6 months
+- Old notifications after 1 year
+- Expired sessions after 30 days
+- Temp files after 7 days
+
+## 5.3.8 Data Archival
+
+### Archived Data
+
+Data moved to cold storage after retention:
+- Old events (5+ years)
+- Old announcements (2+ years)
+- Old feedback (2+ years)
+
+### Archive Format
+
+- Format: JSON export
+- Compression: gzip
+- Storage: Google Cloud Storage (Coldline)
+- Access: Admin only
+
+### Archive Restoration
+
+- Request via admin panel
+- Restoration in 24-48 hours
+- Limited to 10 restorations/month
+
+## 5.3.9 Data Integrity
+
+### Integrity Checks
+
+Daily automated checks:
+- Orphaned records detection
+- Duplicate detection
+- Referential integrity checks
+- Data format validation
+
+### Fix Procedures
+
+- Automated for minor issues
+- Admin intervention for major issues
+- User notification if data affected
+
+## 5.3.10 Data Security Incident Response
+
+### Incident Types
+
+- Data breach
+- Unauthorized access
+- Data corruption
+- Accidental deletion
+
+### Response Procedure
+
+1. Detect incident (monitoring/alerts)
+2. Isolate affected systems
+3. Assess impact
+4. Notify stakeholders (if needed)
+5. Fix vulnerability
+6. Restore from backup (if needed)
+7. Document incident
+8. Review and improve
+
+### Notification Timeline
+
+- Internal: Within 1 hour
+- Admins: Within 24 hours
+- Users: Within 72 hours (if affected)
+
+## 5.3.11 Data Retention Schedule
+
+| Data Type | Active Period | Archive Period | Delete After |
+|-----------|--------------|----------------|--------------|
+| User Profile | Indefinite | - | 30 days after request |
+| Events | Until completed | 5 years | 5 years |
+| Registrations | Until event ends | 3 years | 3 years |
+| Attendance | Until event ends | 3 years | 3 years |
+| Announcements | 1 year | 2 years | 2 years |
+| Feedback | 6 months | 2 years | 2 years |
+| Societies | Indefinite | - | 30 days after delete |
+| Certificates | Permanent | - | Never |
+| Notifications | 3 months | - | 3 months |
+| Logs | 90 days | - | 90 days |
+
+## 5.3.12 Compliance Checklist
+
+- [x] Firestore backups enabled
+- [x] Encryption at rest
+- [x] Encryption in transit
+- [x] Role-based access
+- [x] User data rights implemented
+- [x] Deletion procedures defined
+- [x] Retention policy documented
+- [x] Privacy policy available
+- [x] Terms of service available
+- [x] Regular security audits
+
+---
+
+Document Version: 1.0
+Last Updated: [Aaj ki date]
+Author: [Aapka naam]
+Status: Draft

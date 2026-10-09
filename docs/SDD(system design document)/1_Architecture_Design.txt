@@ -1,0 +1,229 @@
+# 1. Architecture Design
+
+## 1.1 Overview
+
+CampusConnect uses a three-tier architecture with Flutter frontend 
+and Firebase backend. This document serves as the blueprint for 
+implementation.
+
+## 1.2 Architecture Pattern
+
+Pattern: Three-Tier + Serverless Backend
+
+Layers:
+1. Presentation Layer (Flutter)
+2. Business Logic Layer (Firebase)
+3. Data Layer (Firestore)
+
+## 1.3 System Architecture
+
+PRESENTATION LAYER
++------------------+  +------------------+
+|  Student Mobile  |  |  Admin Web       |
+|  App (Flutter)   |  |  Dashboard       |
++--------+---------+  +--------+---------+
+         |                     |
+         |    HTTPS            |
+         v                     v
+BUSINESS LOGIC LAYER
++---------------------------------------------------+
+|              Firebase Backend                      |
+|  +--------+  +----------+  +----------+           |
+|  | Auth   |  |Firestore |  | Storage  |           |
+|  +--------+  +----------+  +----------+           |
+|  +--------+  +----------+                         |
+|  | FCM    |  | Security |                         |
+|  +--------+  +----------+                         |
++---------------------------------------------------+
+                          |
+                          v
+DATA LAYER
++---------------------------------------------------+
+|           Google Cloud Platform                    |
+|  - Firestore (NoSQL Database)                      |
+|  - Cloud Storage (Files)                           |
++---------------------------------------------------+
+
+## 1.4 Folder Structure (Project)
+
+D:\5th Semester\MAD\campus_connect\
+│
+├── lib/
+│   ├── main.dart
+│   ├── firebase_options.dart
+│   │
+│   ├── models/
+│   │   ├── user_model.dart
+│   │   ├── event_model.dart
+│   │   ├── registration_model.dart
+│   │   ├── announcement_model.dart
+│   │   └── feedback_model.dart
+│   │
+│   ├── services/
+│   │   ├── auth_service.dart
+│   │   ├── firestore_service.dart
+│   │   ├── storage_service.dart
+│   │   └── notification_service.dart
+│   │
+│   ├── providers/
+│   │   ├── auth_provider.dart
+│   │   ├── event_provider.dart
+│   │   └── announcement_provider.dart
+│   │
+│   ├── screens/
+│   │   ├── splash/
+│   │   │   └── splash_screen.dart
+│   │   ├── auth/
+│   │   │   ├── login_screen.dart
+│   │   │   └── signup_screen.dart
+│   │   ├── home/
+│   │   │   └── home_screen.dart
+│   │   ├── events/
+│   │   │   ├── events_screen.dart
+│   │   │   ├── event_details_screen.dart
+│   │   │   └── registration_screen.dart
+│   │   ├── my_events/
+│   │   │   ├── my_events_screen.dart
+│   │   │   └── qr_ticket_screen.dart
+│   │   ├── announcements/
+│   │   │   └── announcements_screen.dart
+│   │   └── profile/
+│   │       └── profile_screen.dart
+│   │
+│   ├── widgets/
+│   │   ├── event_card.dart
+│   │   ├── announcement_card.dart
+│   │   ├── custom_button.dart
+│   │   └── loading_widget.dart
+│   │
+│   ├── utils/
+│   │   ├── constants.dart
+│   │   ├── helpers.dart
+│   │   └── validators.dart
+│   │
+│   └── theme/
+│       ├── app_theme.dart
+│       └── colors.dart
+│
+├── android/
+├── ios/
+├── web/
+├── docs/
+├── pubspec.yaml
+└── README.md
+
+## 1.5 Technology Stack
+
+| Layer | Technology | Purpose |
+|-------|-----------|---------|
+| Mobile | Flutter 3.47+ | Android app |
+| Web | Flutter Web | Admin dashboard |
+| Language | Dart 3.13+ | Programming |
+| Backend | Firebase | Backend services |
+| Database | Cloud Firestore | NoSQL database |
+| Auth | Firebase Auth | Authentication |
+| Storage | Firebase Storage | File storage |
+| Messaging | FCM | Push notifications |
+| State | Provider | State management |
+| Navigation | GoRouter | Routing |
+| QR | qr_flutter | QR generation |
+| QR Scan | mobile_scanner | QR scanning |
+
+## 1.6 Dependencies (pubspec.yaml)
+
+dependencies:
+  flutter:
+    sdk: flutter
+  cupertino_icons: ^1.0.6
+  firebase_core: ^3.6.0
+  firebase_auth: ^5.3.1
+  cloud_firestore: ^5.4.4
+  firebase_storage: ^12.3.4
+  firebase_messaging: ^15.1.3
+  provider: ^6.1.2
+  go_router: ^14.3.0
+  intl: ^0.19.0
+  qr_flutter: ^4.1.0
+  mobile_scanner: ^5.2.3
+  image_picker: ^1.1.2
+  cached_network_image: ^3.4.1
+  shared_preferences: ^2.3.2
+  pdf: ^3.10.7
+  printing: ^5.11.1
+
+## 1.7 Implementation Order
+
+Order to build (sprint by sprint):
+
+Day 2:
+  1. Firebase setup
+  2. Project configuration
+  3. Theme and constants
+  4. main.dart
+
+Day 3:
+  5. Auth service
+  6. Auth provider
+  7. Splash screen
+  8. Login screen
+  9. Signup screen
+  10. Home screen (basic)
+  11. Bottom navigation
+
+Day 4:
+  12. User model
+  13. Event model
+  14. Event service
+  15. Events screen
+  16. Event details screen
+  17. Registration flow
+
+Day 5:
+  18. Registration model
+  19. QR ticket screen
+  20. My events screen
+  21. Announcement model
+  22. Announcements screen
+
+Day 6:
+  23. Admin dashboard (Flutter Web)
+  24. Create event form
+  25. Event approval
+  26. View registrations
+
+## 1.8 Data Flow Diagrams
+
+### Login Flow
+User → Login Screen → AuthService.login() 
+    → Firebase Auth → Success
+    → AuthProvider → Home Screen
+
+### Event Registration Flow
+Student → Events Screen → Event Details 
+    → Register Button → FirestoreService.createRegistration()
+    → Generate QR → Save to Firestore
+    → Show QR Ticket
+
+### Admin Approval Flow
+Admin → Dashboard → Pending Events 
+    → Approve Button → FirestoreService.approveEvent()
+    → Update Status → Notify Organizer
+
+## 1.9 Deployment
+
+Development:
+- Local Flutter
+- Firebase (dev project)
+- Emulator testing
+
+Production:
+- APK (Play Store)
+- Web (Firebase Hosting)
+- Firebase (prod project)
+
+---
+
+Document Version: 1.0
+Last Updated: [Aaj ki date]
+Author: [Aapka naam]
+Status: Draft

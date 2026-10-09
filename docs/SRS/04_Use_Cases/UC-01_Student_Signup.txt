@@ -1,0 +1,118 @@
+# UC-01: Student Signup
+
+## Use Case Information
+
+| Field | Value |
+|-------|-------|
+| Use Case ID | UC-01 |
+| Use Case Name | Student Signup |
+| Actor | New Student |
+| Priority | High |
+| Complexity | Medium |
+
+## Description
+
+A new student creates an account on CampusConnect to access events, announcements, and other student features.
+
+## Preconditions
+
+1. Student has downloaded and installed the app
+2. Student is not logged in
+3. Student has a valid university email
+4. Internet connection is available
+
+## Postconditions
+
+1. Student account created in Firebase Auth
+2. User document created in Firestore
+3. Student logged in automatically
+4. Student redirected to Home screen
+
+## Main Flow
+
+1. Student opens the app
+2. System shows Splash screen
+3. System checks authentication state
+4. System finds no active session
+5. System shows Login screen
+6. Student taps "Sign Up" link
+7. System shows Signup screen
+8. Student enters Full Name
+9. Student enters Email
+10. Student enters Password
+11. Student enters Student ID
+12. Student enters Department
+13. Student taps "Sign Up" button
+14. System validates all fields
+15. System creates Firebase Auth account
+16. System creates user document in Firestore
+17. System logs in the student
+18. System redirects to Home screen
+
+## Alternative Flows
+
+### A1: Email Already Registered
+- At step 14, system detects email exists
+- System shows "Email already in use" message
+- Use case ends
+
+### A2: Invalid Email Format
+- At step 14, system detects invalid email
+- System shows "Please enter valid email"
+- Return to step 9
+
+### A3: Weak Password
+- At step 14, system detects weak password
+- System shows "Password must be 6+ characters"
+- Return to step 10
+
+### A4: Empty Required Fields
+- At step 14, system detects empty fields
+- System highlights empty fields
+- Return to step 8
+
+### A5: Network Error
+- At step 15, network fails
+- System shows "Please check your connection"
+- Return to step 13
+
+## Exceptions
+
+- E1: Firebase Auth error - show generic error message
+- E2: Firestore write error - rollback Auth creation
+- E3: Request timeout - show retry option
+
+## Business Rules
+
+- BR-01: Email must be unique
+- BR-02: Password minimum 6 characters
+- BR-03: Student ID must match university format
+- BR-04: Role is automatically "student"
+- BR-05: Account is active by default
+
+## Non-Functional Requirements
+
+- Signup completes in < 30 seconds
+- Password is never stored in plain text
+- All communication over HTTPS
+- Form validation shows inline errors
+
+## Related Use Cases
+
+- UC-02: Student Login
+- UC-03: Browse Events
+
+## UI Reference
+
+Screens: Splash, Login, Signup, Home
+
+## Use Case Diagram
+
+![UC-01 Signup Diagram](diagrams/UC-01_Signup.png)
+
+---
+
+Document Version: 1.0
+Last Updated: [Aaj ki date]
+Author: [Aapka naam]
+Status: Draft

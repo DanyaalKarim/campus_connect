@@ -1,0 +1,383 @@
+# 4. UI/UX Design
+
+## 4.1 Design Philosophy
+
+CampusConnect uses a modern, clean design inspired by:
+- Material Design 3 (Google)
+- Glassmorphism effects
+- Modern SaaS dashboards (2024-2026)
+- Professional typography
+
+## 4.2 Color Palette
+
+### Primary Colors
+- Primary:        #1976D2  (Indigo Blue)
+- Primary Dark:   #0D47A1
+- Primary Light:  #BBDEFB
+- Gradient:       #1976D2 → #9C27B0
+
+### Status Colors
+- Success:        #4CAF50  (Green)
+- Warning:        #FF9800  (Orange)
+- Error:          #F44336  (Red)
+- Info:           #2196F3  (Blue)
+
+### Neutral Colors
+- Background:     #F5F7FA  (Light Gray)
+- Surface:        #FFFFFF  (White)
+- Text Primary:   #1A1A2E  (Dark)
+- Text Secondary: #6B7280  (Gray)
+- Divider:        #E5E7EB
+
+### Glass Effects
+- Glass White:    rgba(255, 255, 255, 0.7)
+- Glass Blur:     20px
+- Glass Border:   rgba(255, 255, 255, 0.3)
+
+## 4.3 Typography
+
+Font: Poppins (Google Fonts)
+
+| Style | Size | Weight | Line Height |
+|-------|------|--------|-------------|
+| H1 | 32sp | Bold | 1.2 |
+| H2 | 24sp | Bold | 1.3 |
+| H3 | 20sp | SemiBold | 1.3 |
+| Body Large | 16sp | Regular | 1.5 |
+| Body | 14sp | Regular | 1.5 |
+| Caption | 12sp | Regular | 1.4 |
+| Button | 16sp | SemiBold | 1.2 |
+
+## 4.4 Spacing System
+
+8px grid:
+- xs: 4px
+- sm: 8px
+- md: 16px
+- lg: 24px
+- xl: 32px
+- xxl: 48px
+
+## 4.5 Border Radius
+
+- Small: 8px (Chips)
+- Medium: 12px (Buttons, Inputs)
+- Large: 16px (Cards)
+- Extra Large: 24px (Modals, Images)
+
+## 4.6 Shadows
+
+Card Shadow:
+BoxShadow(
+  color: Colors.black.withOpacity(0.08),
+  blurRadius: 16,
+  offset: Offset(0, 4),
+)
+
+Button Shadow:
+BoxShadow(
+  color: Color(0xFF1976D2).withOpacity(0.3),
+  blurRadius: 12,
+  offset: Offset(0, 4),
+)
+
+Glass Shadow:
+BoxShadow(
+  color: Colors.black.withOpacity(0.05),
+  blurRadius: 20,
+  offset: Offset(0, 8),
+)
+
+## 4.7 Navigation Structure
+
+### Student App (5 Tabs)
+1. Home      - Icons.home_rounded
+2. Events    - Icons.event_rounded
+3. News      - Icons.campaign_rounded
+4. My Events - Icons.bookmark_rounded
+5. Profile   - Icons.person_rounded
+
+Navigation: BottomNavigationBar with glass effect
+
+### Admin Dashboard (Sidebar)
+1. Dashboard     - Icons.dashboard_rounded
+2. Events        - Icons.event_rounded
+3. Approvals     - Icons.pending_actions_rounded
+4. Users         - Icons.people_rounded
+5. Societies     - Icons.groups_rounded
+6. Announcements - Icons.campaign_rounded
+7. Reports       - Icons.analytics_rounded
+8. Settings      - Icons.settings_rounded
+
+Navigation: Sidebar (280px) with icons + labels
+
+## 4.8 Screen Designs (13 Student Screens)
+
+### Screen 1: Splash Screen
+- Gradient background (blue → purple)
+- Glass circle with school icon (120px)
+- "CampusConnect" white bold (32sp)
+- Tagline "University Digital Platform" (16sp)
+- Loading indicator at bottom
+- Auto-navigate after 2s
+
+### Screen 2: Login Screen
+- White background
+- Top gradient (blue, 30% opacity, curved bottom)
+- Card with:
+  - Logo (school icon in blue circle)
+  - "Welcome Back" (28sp bold)
+  - Email field (glass effect)
+  - Password field (with eye toggle)
+  - "Forgot Password?" (blue link)
+  - "Login" button (gradient, full width, 50px)
+- Below: "Don't have account? Sign Up"
+- Social login divider
+- Google button (white, border)
+
+### Screen 3: Signup Screen
+- Similar to login
+- Fields: Name, Email, Password, Student ID, Department
+- Role selector (Student/Organizer)
+- "Sign Up" button (gradient)
+- Terms checkbox
+
+### Screen 4: Home Screen
+- AppBar: "Hello, Ali!" + Avatar (glass effect)
+- Search bar (glass, rounded)
+- Banner: Featured event (gradient card)
+- Section: "Upcoming Events" (horizontal scroll)
+  - Cards (280px width, glass)
+  - Poster + Title + Date + Venue
+- Section: "Latest Announcements" (vertical)
+  - Cards with icon + title + subtitle
+- Bottom: 5-tab navigation
+
+### Screen 5: Events Screen
+- Search bar (top)
+- Category chips (horizontal, colorful)
+- Event list (vertical cards):
+  - Poster (left, 100x100)
+  - Title (bold, 2 lines)
+  - Date + Time (with icons)
+  - Venue (with icon)
+  - Category badge
+  - Progress bar (registered/capacity)
+
+### Screen 6: Event Details Screen
+- Hero image (poster, 250px)
+- Back button (glass circle, top-left)
+- Share button (glass circle, top-right)
+- Title (24sp bold)
+- Category badge
+- Info cards (glass):
+  - Date with calendar icon
+  - Time with clock icon
+  - Venue with location icon
+- Organizer info (avatar + name)
+- Speaker info
+- Description (expandable)
+- Registration progress bar
+- Fixed "Register Now" button (bottom, gradient)
+
+### Screen 7: QR Ticket Screen
+- White card (large, rounded)
+- Event title (20sp bold)
+- Student name + ID
+- QR code (250x250, centered)
+- Event details
+- Status badge
+- "Download" + "Share" buttons
+
+### Screen 8: My Events Screen
+- TabBar: Upcoming / Completed
+- Event cards with:
+  - Poster
+  - Title
+  - Date
+  - Status badge
+- Tap to view ticket/certificate
+
+### Screen 9: Announcements Screen
+- Category chips
+- Announcement cards:
+  - Category icon (colored circle)
+  - Title (bold)
+  - Description preview
+  - Date + Category badge
+- Unread indicator (dot)
+
+### Screen 10: Profile Screen
+- Gradient header (blue)
+- Avatar (80px, white border)
+- Name + Email
+- Edit button
+- Menu list (with icons):
+  - My Certificates
+  - Feedback History
+  - Settings
+  - About
+  - Logout (red)
+
+### Screen 11: Certificates Screen
+- List of certificate cards
+- Preview thumbnail
+- Download button
+- Empty state
+
+### Screen 12: Feedback Screen
+- Event info
+- Star rating (large, 5 stars)
+- Text area (comment)
+- Submit button
+
+### Screen 13: Search Screen
+- Search bar (auto-focus)
+- Recent searches
+- Search results (events + announcements)
+- Category filter
+
+## 4.9 Admin Dashboard Screens (8 Screens)
+
+### Screen 1: Login
+- Dark gradient background
+- Centered glass card
+- Logo + title
+- Email + Password
+- "Sign In" gradient button
+
+### Screen 2: Dashboard
+- Welcome header ("Welcome back, Admin!")
+- 4 stat cards:
+  - Total Events (+trend)
+  - Total Registrations
+  - Attendance Rate
+  - Active Societies
+- 2 charts:
+  - Registrations over time (line)
+  - Events by category (pie)
+- Recent events table
+- Activity feed
+
+### Screen 3: Pending Events
+- Header + count badge
+- Data table:
+  - Poster thumbnail
+  - Title
+  - Organizer
+  - Date submitted
+  - Actions (Approve/Reject buttons)
+
+### Screen 4: All Events
+- Filter tabs: All / Approved / Rejected / Completed
+- Data table with sortable columns
+- Search bar
+- Export button
+
+### Screen 5: Create Event
+- Multi-step form (4 steps)
+- Progress indicator
+- Fields per step
+- Save as draft button
+- Submit button
+
+### Screen 6: Manage Users
+- Tabs: Students / Organizers / Admins
+- Search bar
+- Data table:
+  - Avatar
+  - Name + Email
+  - Role
+  - Status
+  - Actions
+
+### Screen 7: Manage Societies
+- Grid of society cards
+- Each card: Logo, name, members, status
+- Add society button
+- Filters
+
+### Screen 8: Reports
+- Date range selector
+- Multiple charts
+- Export buttons (PDF, CSV)
+
+## 4.10 Components
+
+### Custom Button
+ElevatedButton with:
+- Gradient background
+- 16px border radius
+- 50px height
+- Shadow
+
+### Custom TextField
+InputDecoration with:
+- Glass background
+- 16px border radius
+- Prefix icon
+- Border radius 16px
+
+### Event Card
+Card with:
+- Glass background
+- 16px border radius
+- Image with rounded top
+- Padding 16px
+- Shadow
+
+### Status Badge
+Container with:
+- Colored background (20% opacity)
+- Rounded corners (8px)
+- Small text (12sp)
+
+### Category Chip
+FilterChip with:
+- Rounded (20px)
+- Selected color (primary with 20% opacity)
+- Icon + Label
+
+## 4.11 Animations
+
+- Page transition: 300ms slide
+- Button ripple: default
+- Card hover: 200ms scale 1.02
+- Loading: shimmer effect
+- Splash: fade in + scale
+
+## 4.12 Implementation Order
+
+Day 3:
+1. theme/colors.dart
+2. theme/app_theme.dart
+3. widgets/custom_button.dart
+4. widgets/custom_textfield.dart
+5. Splash screen
+6. Login screen
+7. Signup screen
+
+Day 4:
+8. widgets/event_card.dart
+9. Home screen
+10. Events screen
+11. Event details screen
+
+Day 5:
+12. widgets/announcement_card.dart
+13. QR ticket screen
+14. My events screen
+15. Announcements screen
+
+Day 6:
+16. Profile screen
+17. Admin login
+18. Admin dashboard
+19. Create event form
+
+---
+
+Document Version: 1.0
+Last Updated: [Aaj ki date]
+Author: [Aapka naam]
+Status: Draft

@@ -1,0 +1,501 @@
+# 3. API Design
+
+## 3.1 Overview
+
+CampusConnect uses Firebase services as its backend. This document 
+defines all service methods, providers, and data operations needed 
+for implementation. Instead of traditional REST APIs, we use 
+Firebase SDK methods directly from Flutter.
+
+## 3.2 Service Architecture
+
+Services (lib/services/):
+1. auth_service.dart         - Authentication
+2. firestore_service.dart    - Database operations
+3. storage_service.dart      - File uploads
+4. notification_service.dart - Push notifications
+
+Providers (lib/providers/):
+1. auth_provider.dart        - Auth state
+2. event_provider.dart       - Event state
+3. announcement_provider.dart- Announcement state
+
+## 3.3 Auth Service (auth_service.dart)
+
+Class: AuthService
+
+Methods:
+
+### signUp()
+Future<String?> signUp({
+  required String name,
+  required String email,
+  required String password,
+  required String role,
+  String? studentId,
+  String? department,
+})
+
+Purpose: Create new user account
+Returns: null on success, error message on failure
+
+Implementation:
+1. Create Firebase Auth account
+2. Create user document in Firestore
+3. Return null
+
+### login()
+Future<String?> login({
+  required String email,
+  required String password,
+})
+
+Purpose: Authenticate user
+Returns: null on success, error message on failure
+
+### logout()
+Future<void> logout()
+
+Purpose: Sign out current user
+
+### getCurrentUser()
+User? getCurrentUser()
+
+Purpose: Get current Firebase user
+Returns: User or null
+
+### getUserData()
+Future<Map<String, dynamic>?> getUserData()
+
+Purpose: Get user document from Firestore
+Returns: User data map or null
+
+### getUserRole()
+Future<String?> getUserRole()
+
+Purpose: Get role of current user
+Returns: "student", "organizer", "admin" or null
+
+## 3.4 Firestore Service (firestore_service.dart)
+
+Class: FirestoreService
+
+### EVENTS METHODS
+
+### createEvent()
+Future<String?> createEvent({
+  required String title,
+  required String description,
+  required String category,
+  required DateTime date,
+  required String time,
+  required String venue,
+  required int capacity,
+  required DateTime registrationDeadline,
+  String? speaker,
+  File? posterImage,
+})
+
+Purpose: Create new event (organizer)
+Returns: null on success, error on failure
+
+Implementation:
+1. Upload poster if provided
+2. Create event document with status "pending"
+3. Return null
+
+### getEvents()
+Stream<QuerySnapshot> getEvents({
+  String? category,
+  String? status,
+})
+
+Purpose: Get list of events (real-time)
+Returns: Stream of events
+
+### getEventById()
+Future<DocumentSnapshot> getEventById(String eventId)
+
+Purpose: Get single event details
+
+### approveEvent()
+Future<void> approveEvent(String eventId, String adminId)
+
+Purpose: Admin approves event
+
+### rejectEvent()
+Future<void> rejectEvent(
+  String eventId, 
+  String adminId, 
+  String reason
+)
+
+Purpose: Admin rejects event
+
+### updateEvent()
+Future<void> updateEvent(
+  String eventId, 
+  Map<String, dynamic> data
+)
+
+Purpose: Update event details
+
+### deleteEvent()
+Future<void> deleteEvent(String eventId)
+
+Purpose: Delete event
+
+### REGISTRATION METHODS
+
+### registerForEvent()
+Future<String?> registerForEvent({
+  required String eventId,
+  required String studentId,
+  required String studentName,
+  required String studentEmail,
+  required String studentNumber,
+})
+
+Purpose: Student registers for event
+Returns: null on success, error on failure
+
+Implementation:
+1. Check if already registered
+2. Check if event full
+3. Generate unique QR code
+4. Create registration document
+5. Increment event registeredCount
+6. Return null
+
+### getMyRegistrations()
+Stream<QuerySnapshot> getMyRegistrations(String studentId)
+
+Purpose: Get student's registrations
+
+### getEventRegistrations()
+Stream<QuerySnapshot> getEventRegistrations(String eventId)
+
+Purpose: Get all registrations for event
+
+### cancelRegistration()
+Future<void> cancelRegistration(String regId)
+
+Purpose: Cancel registration
+
+### markAttendance()
+Future<void> markAttendance({
+  required String regId,
+  required String eventId,
+  required String studentId,
+  required String scannedBy,
+})
+
+Purpose: Mark attendance via QR scan
+
+### ANNOUNCEMENT METHODS
+
+### createAnnouncement()
+Future<String?> createAnnouncement({
+  required String title,
+  required String description,
+  required String category,
+  required String priority,
+  String? targetEventId,
+})
+
+Purpose: Create new announcement
+
+### getAnnouncements()
+Stream<QuerySnapshot> getAnnouncements({String? category})
+
+Purpose: Get announcements
+
+### FEEDBACK METHODS
+
+### submitFeedback()
+Future<String?> submitFeedback({
+  required String eventId,
+  required String studentId,
+  required String studentName,
+  required int rating,
+  String? comment,
+})
+
+Purpose: Submit feedback
+
+### getEventFeedback()
+Stream<QuerySnapshot> getEventFeedback(String eventId)
+
+Purpose: Get feedback for event
+
+### CERTIFICATE METHODS
+
+### generateCertificate()
+Future<void> generateCertificate({
+  required String eventId,
+  required String studentId,
+})
+
+Purpose: Generate certificate for student
+
+### getMyCertificates()
+Stream<QuerySnapshot> getMyCertificates(String studentId)
+
+Purpose: Get student's certificates
+
+## 3.5 Storage Service (storage_service.dart)
+
+Class: StorageService
+
+### uploadEventPoster()
+Future<String?> uploadEventPoster(String eventId, File image)
+
+Purpose: Upload event poster
+Returns: Download URL
+
+### uploadProfileImage()
+Future<String?> uploadProfileImage(String userId, File image)
+
+Purpose: Upload profile image
+
+### uploadEventPhoto()
+Future<String?> uploadEventPhoto(
+  String eventId, 
+  String photoId, 
+  File image
+)
+
+Purpose: Upload event photo
+
+### uploadCertificate()
+Future<String?> uploadCertificate(String certId, File pdf)
+
+Purpose: Upload certificate PDF
+
+## 3.6 Notification Service (notification_service.dart)
+
+Class: NotificationService
+
+### initialize()
+Future<void> initialize()
+
+Purpose: Initialize FCM
+
+### getToken()
+Future<String?> getToken()
+
+Purpose: Get device FCM token
+
+### onMessageReceived()
+Stream<RemoteMessage> onMessageReceived()
+
+Purpose: Listen for foreground messages
+
+### onMessageOpened()
+Stream<RemoteMessage> onMessageOpened()
+
+Purpose: Listen for notification taps
+
+### subscribeToTopic()
+Future<void> subscribeToTopic(String topic)
+
+Purpose: Subscribe to topic
+
+### sendNotification()
+Future<void> sendNotification({
+  required String token,
+  required String title,
+  required String body,
+})
+
+Purpose: Send notification to device
+
+## 3.7 Auth Provider (auth_provider.dart)
+
+Class: AuthProvider extends ChangeNotifier
+
+Properties:
+- User? user
+- Map<String, dynamic>? userData
+- bool isLoading
+- String? errorMessage
+
+Methods:
+
+### initialize()
+Future<void> initialize()
+Purpose: Check auth state on app start
+
+### signup()
+Future<bool> signup({...})
+Purpose: Sign up new user
+
+### login()
+Future<bool> login({...})
+Purpose: Login user
+
+### logout()
+Future<void> logout()
+Purpose: Logout user
+
+### updateProfile()
+Future<bool> updateProfile({...})
+Purpose: Update profile
+
+## 3.8 Event Provider (event_provider.dart)
+
+Class: EventProvider extends ChangeNotifier
+
+Properties:
+- List<Event> events
+- Event? selectedEvent
+- bool isLoading
+- String? errorMessage
+
+Methods:
+
+### loadEvents()
+Future<void> loadEvents({String? category})
+
+### loadEventById()
+Future<void> loadEventById(String eventId)
+
+### registerForEvent()
+Future<bool> registerForEvent(String eventId)
+
+### loadMyRegistrations()
+Future<void> loadMyRegistrations()
+
+## 3.9 Announcement Provider (announcement_provider.dart)
+
+Class: AnnouncementProvider extends ChangeNotifier
+
+Properties:
+- List<Announcement> announcements
+- bool isLoading
+
+Methods:
+
+### loadAnnouncements()
+Future<void> loadAnnouncements({String? category})
+
+### filterByCategory()
+void filterByCategory(String category)
+
+## 3.10 Data Models
+
+### User Model
+class UserModel {
+  final String uid;
+  final String name;
+  final String email;
+  final String role;
+  final String studentId;
+  final String department;
+  final String profileImage;
+  final bool isActive;
+  final DateTime createdAt;
+  
+  UserModel({...});
+  factory UserModel.fromMap(Map<String, dynamic> map) {...}
+  Map<String, dynamic> toMap() {...}
+}
+
+### Event Model
+class EventModel {
+  final String eventId;
+  final String title;
+  final String description;
+  final String category;
+  final DateTime date;
+  final String time;
+  final String venue;
+  final int capacity;
+  final int registeredCount;
+  final String organizerId;
+  final String organizerName;
+  final String posterUrl;
+  final String speaker;
+  final DateTime registrationDeadline;
+  final String status;
+  final DateTime createdAt;
+  
+  EventModel({...});
+  factory EventModel.fromMap(Map<String, dynamic> map) {...}
+  Map<String, dynamic> toMap() {...}
+}
+
+### Registration Model
+class RegistrationModel {
+  final String regId;
+  final String eventId;
+  final String eventTitle;
+  final String studentId;
+  final String studentName;
+  final String status;
+  final String qrCode;
+  final DateTime registeredAt;
+  
+  RegistrationModel({...});
+  factory RegistrationModel.fromMap(Map<String, dynamic> map) {...}
+}
+
+### Announcement Model
+class AnnouncementModel {
+  final String annId;
+  final String title;
+  final String description;
+  final String category;
+  final String priority;
+  final String createdBy;
+  final String createdByName;
+  final DateTime createdAt;
+  
+  AnnouncementModel({...});
+  factory AnnouncementModel.fromMap(Map<String, dynamic> map) {...}
+}
+
+## 3.11 Error Handling
+
+All service methods return either:
+- null on success
+- String (error message) on failure
+
+Error messages:
+- "Email already in use"
+- "Invalid email or password"
+- "Event is full"
+- "Already registered"
+- "Registration closed"
+- "Network error"
+- "Invalid QR code"
+
+## 3.12 Implementation Order
+
+Day 3:
+1. auth_service.dart
+2. auth_provider.dart
+3. user_model.dart
+
+Day 4:
+4. event_model.dart
+5. firestore_service.dart (events methods)
+6. event_provider.dart
+7. registration_model.dart
+8. firestore_service.dart (registration methods)
+
+Day 5:
+9. announcement_model.dart
+10. announcement_provider.dart
+11. storage_service.dart
+12. notification_service.dart
+
+Day 6:
+13. Admin services (createEvent, approveEvent)
+
+---
+
+Document Version: 1.0
+Last Updated: [Aaj ki date]
+Author: [Aapka naam]
+Status: Draft

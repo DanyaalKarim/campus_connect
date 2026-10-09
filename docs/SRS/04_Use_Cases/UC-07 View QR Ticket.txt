@@ -1,0 +1,94 @@
+# UC-07: View QR Ticket
+
+## Use Case Information
+
+| Field | Value |
+|-------|-------|
+| Use Case ID | UC-07 |
+| Use Case Name | View QR Ticket |
+| Actor | Student |
+| Priority | High |
+| Complexity | Low |
+
+## Description
+
+A student views their digital QR ticket for a registered event. The QR code is shown at the event entrance for attendance scanning.
+
+## Preconditions
+
+1. Student is logged in
+2. Student has a valid registration
+3. Registration is active (not cancelled)
+
+## Postconditions
+
+1. QR ticket displayed
+2. QR code scannable by organizer
+
+## Main Flow
+
+1. Student opens My Events
+2. Student taps on registered event
+3. System fetches registration details
+4. System displays QR ticket with:
+   - Event title
+   - Student name
+   - Student ID
+   - Event date and time
+   - QR code image
+   - Registration status
+5. Student shows QR code at event
+
+## Alternative Flows
+
+### A1: Event Completed
+- System shows "Event Completed" badge
+- QR code greyed out
+
+### A2: Event Cancelled
+- System shows "Event Cancelled"
+- Use case ends
+
+### A3: Attendance Already Marked
+- System shows "Attended" checkmark
+- QR code still visible
+
+## Exceptions
+
+- E1: Registration not found - show error
+- E2: Network error - show cached ticket
+
+## Business Rules
+
+- BR-01: QR code must be unique per registration
+- BR-02: QR code should work offline (cached)
+- BR-03: QR code should not expire until event ends
+- BR-04: Screen brightness increased automatically
+
+## Non-Functional Requirements
+
+- QR ticket loads in < 1 second
+- QR code readable by scanners
+- Works offline (cached)
+- Screen brightness optimized
+
+## Related Use Cases
+
+- UC-06: Register Event
+- UC-08: View My Events
+- UC-15: Scan QR Attendance
+
+## UI Reference
+
+Screens: QR Ticket
+
+## Use Case Diagram
+
+![UC-07 View QR Ticket Diagram](diagrams/UC-07_View_QR_Ticket.png)
+
+---
+
+Document Version: 1.0
+Last Updated: [Aaj ki date]
+Author: [Aapka naam]
+Status: Draft

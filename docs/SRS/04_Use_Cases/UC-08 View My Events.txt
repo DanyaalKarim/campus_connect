@@ -1,0 +1,90 @@
+# UC-08: View My Events
+
+## Use Case Information
+
+| Field | Value |
+|-------|-------|
+| Use Case ID | UC-08 |
+| Use Case Name | View My Events |
+| Actor | Student |
+| Priority | High |
+| Complexity | Low |
+
+## Description
+
+A student views all their registered events, split into upcoming and completed categories, along with status and action options.
+
+## Preconditions
+
+1. Student is logged in
+
+## Postconditions
+
+1. Two lists shown: Upcoming and Completed events
+2. Student can view QR ticket or certificate
+
+## Main Flow
+
+1. Student opens app
+2. Student taps "My Events" tab in bottom nav
+3. System fetches all registrations for the student
+4. System splits into:
+   - Upcoming events (future date)
+   - Completed events (past date)
+5. System displays events with status:
+   - Registered
+   - Attended
+   - Certificate Available
+6. Student taps any event to view details
+
+## Alternative Flows
+
+### A1: No Registrations
+- System shows "No events yet"
+- System shows "Browse Events" button
+- Use case ends
+
+### A2: Upcoming Empty
+- System shows "No upcoming events"
+
+### A3: Completed Empty
+- System shows "No completed events"
+
+## Exceptions
+
+- E1: Network error - show cached events
+- E2: Firestore error - show retry
+
+## Business Rules
+
+- BR-01: Sort upcoming by date ascending
+- BR-02: Sort completed by date descending
+- BR-03: Show status badge for each event
+- BR-04: Tap upcoming -> QR ticket
+- BR-05: Tap completed -> certificate (if available)
+
+## Non-Functional Requirements
+
+- List loads in < 1.5 seconds
+- Status badges clear and visible
+
+## Related Use Cases
+
+- UC-06: Register Event
+- UC-07: View QR Ticket
+- UC-11: View Certificates
+
+## UI Reference
+
+Screens: My Events
+
+## Use Case Diagram
+
+![UC-08 View My Events Diagram](diagrams/UC-08_View_My_Events.png)
+
+---
+
+Document Version: 1.0
+Last Updated: [Aaj ki date]
+Author: [Aapka naam]
+Status: Draft

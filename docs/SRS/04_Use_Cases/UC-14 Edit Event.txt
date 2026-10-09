@@ -1,0 +1,96 @@
+# UC-14: Edit Event
+
+## Use Case Information
+
+| Field | Value |
+|-------|-------|
+| Use Case ID | UC-14 |
+| Use Case Name | Edit Event |
+| Actor | Organizer |
+| Priority | High |
+| Complexity | Low |
+
+## Description
+
+An organizer edits an existing event to update details like description, date, venue, or poster.
+
+## Preconditions
+
+1. Organizer is logged in
+2. Event exists and belongs to organizer
+3. Event is not completed
+
+## Postconditions
+
+1. Event updated in Firestore
+2. Changes visible to students (if event was approved)
+3. If event was approved and major changes made, re-approval required
+
+## Main Flow
+
+1. Organizer opens dashboard
+2. Organizer selects event from "My Events"
+3. Organizer clicks "Edit"
+4. System shows edit form with existing data
+5. Organizer modifies fields
+6. Organizer clicks "Save Changes"
+7. System validates changes
+8. System updates event document
+9. System shows success message
+10. System notifies registered students (if major changes)
+
+## Alternative Flows
+
+### A1: Event Completed
+- System shows "Cannot edit completed event"
+- Use case ends
+
+### A2: Invalid Date Change
+- System shows "Invalid date"
+- Return to step 5
+
+### A3: Capacity Reduced Below Registered
+- System shows "Capacity cannot be less than registered count"
+- Return to step 5
+
+### A4: Major Change After Approval
+- System marks event as "pending re-approval"
+- System notifies admin
+
+## Exceptions
+
+- E1: Network error - retry
+- E2: Event deleted by admin - show error
+
+## Business Rules
+
+- BR-01: Cannot edit completed events
+- BR-02: Cannot reduce capacity below registered count
+- BR-03: Major changes require re-approval
+- BR-04: Minor changes allowed without re-approval
+- BR-05: Registered students notified of major changes
+
+## Non-Functional Requirements
+
+- Form loads in < 1 second
+- Save completes in < 2 seconds
+
+## Related Use Cases
+
+- UC-13: Create Event
+- UC-19: Approve Event
+
+## UI Reference
+
+Screens: Edit Event Form
+
+## Use Case Diagram
+
+![UC-14 Edit Event Diagram](diagrams/UC-14_Edit_Event.png)
+
+---
+
+Document Version: 1.0
+Last Updated: [Aaj ki date]
+Author: [Aapka naam]
+Status: Draft

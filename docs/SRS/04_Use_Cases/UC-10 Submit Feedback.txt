@@ -1,0 +1,90 @@
+# UC-10: Submit Feedback
+
+## Use Case Information
+
+| Field | Value |
+|-------|-------|
+| Use Case ID | UC-10 |
+| Use Case Name | Submit Feedback |
+| Actor | Student |
+| Priority | Medium |
+| Complexity | Low |
+
+## Description
+
+A student submits feedback (rating and comment) for an event they attended. This helps organizers improve future events.
+
+## Preconditions
+
+1. Student is logged in
+2. Student attended the event
+3. Event has been completed
+
+## Postconditions
+
+1. Feedback saved in Firestore
+2. Organizer can view feedback
+
+## Main Flow
+
+1. Student opens My Events
+2. Student taps on completed event
+3. System shows "Give Feedback" button
+4. Student taps "Give Feedback"
+5. System shows feedback form
+6. Student selects rating (1-5 stars)
+7. Student optionally writes comment
+8. Student taps "Submit"
+9. System validates input
+10. System saves feedback
+11. System shows thank you message
+
+## Alternative Flows
+
+### A1: Already Submitted
+- System shows existing feedback
+- Student can edit
+
+### A2: No Rating Selected
+- System shows "Please select rating"
+
+### A3: Empty Comment
+- Comment is optional
+- System accepts without comment
+
+## Exceptions
+
+- E1: Network error - show retry
+- E2: Duplicate feedback - update existing
+
+## Business Rules
+
+- BR-01: One feedback per student per event
+- BR-02: Rating 1-5 stars required
+- BR-03: Comment optional, max 500 chars
+- BR-04: Can edit within 7 days
+
+## Non-Functional Requirements
+
+- Form loads in < 1 second
+- Submission completes in < 1 second
+
+## Related Use Cases
+
+- UC-08: View My Events
+- UC-16: View Statistics (Organizer)
+
+## UI Reference
+
+Screens: Feedback Form
+
+## Use Case Diagram
+
+![UC-10 Submit Feedback Diagram](diagrams/UC-10_Submit_Feedback.png)
+
+---
+
+Document Version: 1.0
+Last Updated: [Aaj ki date]
+Author: [Aapka naam]
+Status: Draft

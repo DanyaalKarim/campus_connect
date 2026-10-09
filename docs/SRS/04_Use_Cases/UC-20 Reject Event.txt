@@ -1,0 +1,101 @@
+# UC-20: Reject Event
+
+## Use Case Information
+
+| Field | Value |
+|-------|-------|
+| Use Case ID | UC-20 |
+| Use Case Name | Reject Event |
+| Actor | Admin |
+| Priority | High |
+| Complexity | Low |
+
+## Description
+
+An admin rejects a pending event with a reason. The organizer can edit and resubmit the event.
+
+## Preconditions
+
+1. Admin is logged in
+2. At least one event is in "pending" status
+
+## Postconditions
+
+1. Event status changed to "rejected"
+2. Rejection reason saved
+3. Organizer notified with reason
+4. Event not visible to students
+
+## Main Flow
+
+1. Admin opens admin dashboard
+2. Admin clicks "Pending Events"
+3. System fetches pending events
+4. Admin selects an event to review
+5. System shows full event details
+6. Admin reviews content
+7. Admin clicks "Reject"
+8. System shows rejection reason form
+9. Admin enters reason (required)
+10. Admin confirms rejection
+11. System updates event status to "rejected"
+12. System saves rejection reason
+13. System sends notification to organizer
+14. System shows success message
+
+## Alternative Flows
+
+### A1: Empty Reason
+- At step 9, reason is empty
+- System shows "Please provide rejection reason"
+- Return to step 9
+
+### A2: Cancel Rejection
+- Admin clicks "Cancel"
+- Return to step 5
+
+### A3: Approve Instead
+- Admin changes mind
+- Admin clicks "Approve"
+- System redirects to UC-19
+
+## Exceptions
+
+- E1: Firestore write error - retry
+- E2: Notification failure - log error
+- E3: Event already approved/rejected
+
+## Business Rules
+
+- BR-01: Only admin can reject events
+- BR-02: Rejection reason is mandatory
+- BR-03: Rejection reason max 500 characters
+- BR-04: Organizer can edit and resubmit
+- BR-05: Rejection action logged
+
+## Non-Functional Requirements
+
+- Rejection completes in < 2 seconds
+- Reason form loads quickly
+- Notification sent in < 5 seconds
+
+## Related Use Cases
+
+- UC-13: Create Event (Organizer)
+- UC-19: Approve Event
+- UC-14: Edit Event
+
+## UI Reference
+
+Screens: Pending Events, Reject Form
+
+## Use Case Diagram
+
+![UC-20 Reject Event Diagram](diagrams/UC-20_Reject_Event.png)
+
+---
+
+Document Version: 1.0
+Last Updated: [Aaj ki date]
+Author: [Aapka naam]
+Status: Draft

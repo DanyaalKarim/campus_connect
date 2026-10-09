@@ -1,0 +1,138 @@
+# Sprint Schedule (9-Day Plan)
+
+## Overview
+
+The 9-day project is divided into 9 daily sprints. Each sprint has specific goals and deliverables.
+
+## Day 1: Planning
+
+Focus: Project Plan + SDD
+
+Deliverables:
+- Project Plan document
+- SDD document (short version)
+
+Time: 4-5 hours
+
+## Day 2: Firebase Setup + Project Setup
+
+Focus: Environment preparation
+
+Deliverables:
+- Firebase project created
+- Firestore collections defined
+- Flutter project configured
+- Folder structure ready
+- Theme and constants set
+
+Time: 10 hours
+
+## Day 3: Authentication + Home
+
+Focus: User login and home screen
+
+Deliverables:
+- Splash screen
+- Login screen (working)
+- Signup screen (working)
+- Home screen with dummy data
+- Bottom navigation
+
+Time: 12 hours
+
+## Day 4: Events + Registration
+
+Focus: Complete event flow
+
+Deliverables:
+- Events list screen
+- Event details screen
+- Registration flow
+- Firestore integration (real data)
+- My Events screen
+
+Time: 12 hours
+
+## Day 5: QR + Announcements + Admin
+
+Focus: Complete core features
+
+Deliverables:
+- QR code generation
+- QR ticket screen
+- Announcements screen
+- Admin web dashboard (basic)
+- Create event form
+
+Time: 12 hours
+
+## Day 6: Admin Panel + Integration
+
+Focus: Complete admin features
+
+Deliverables:
+- Event approval
+- View registrations
+- Manage users (basic)
+- Full integration testing
+
+Time: 12 hours
+
+## Day 7: Testing + Bug Fixes
+
+Focus: Quality assurance
+
+Deliverables:
+- All features tested
+- Bugs fixed
+- UI polished
+- Real device testing
+
+Time: 12 hours
+
+## Day 8: Documentation
+
+Focus: Complete all documents
+
+Deliverables:
+- Test Plan
+- User Manuals (3)
+- Deployment Guide
+- Final Report (start)
+
+Time: 12 hours
+
+## Day 9: Deployment
+
+Focus: Deploy and submit
+
+Deliverables:
+- APK built
+- Web dashboard deployed
+- Final checks
+- Presentation ready
+
+Time: 10 hours
+
+## Sprint Summary Table
+
+| Day | Sprint | Focus | Hours |
+|-----|--------|-------|-------|
+| 1 | Planning | Plan + SDD | 4-5 |
+| 2 | Setup | Firebase + Project | 10 |
+| 3 | Auth | Login + Home | 12 |
+| 4 | Events | Events + Registration | 12 |
+| 5 | Features | QR + Admin | 12 |
+| 6 | Integration | Admin + Testing | 12 |
+| 7 | Testing | QA + Bug Fixes | 12 |
+| 8 | Documentation | All Docs | 12 |
+| 9 | Deployment | Deploy + Submit | 10 |
+
+Total Hours: ~96 hours
+
+---
+
+Document Version: 1.0
+Last Updated: [Aaj ki date]
+Author: [Aapka naam]
+Status: Draft

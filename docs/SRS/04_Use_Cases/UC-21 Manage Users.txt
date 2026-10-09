@@ -1,0 +1,117 @@
+# UC-21: Manage Users
+
+## Use Case Information
+
+| Field | Value |
+|-------|-------|
+| Use Case ID | UC-21 |
+| Use Case Name | Manage Users |
+| Actor | Admin |
+| Priority | High |
+| Complexity | Medium |
+
+## Description
+
+An admin manages all platform users including students, organizers, and societies. Actions include viewing, searching, disabling, and enabling accounts.
+
+## Preconditions
+
+1. Admin is logged in
+2. At least one user exists
+
+## Postconditions
+
+1. User data updated in Firestore
+2. Actions logged
+3. Affected users notified (if disabled)
+
+## Main Flow
+
+1. Admin opens admin dashboard
+2. Admin clicks "Manage Users"
+3. System shows user categories:
+   - Students
+   - Organizers
+   - Societies
+4. Admin selects a category
+5. System displays user list with:
+   - Name
+   - Email
+   - Role
+   - Status (Active/Disabled)
+   - Registration date
+6. Admin can:
+   - Search user by name/email
+   - Filter by status
+   - View user details
+   - Disable user
+   - Enable user
+   - Change role (with confirmation)
+
+## Alternative Flows
+
+### A1: No Users
+- System shows "No users found"
+
+### A2: Disable User
+- Admin clicks "Disable"
+- System shows confirmation dialog
+- Admin confirms
+- User account disabled
+- User notified via email
+- User cannot login
+
+### A3: Enable User
+- Admin clicks "Enable"
+- User can login again
+
+### A4: Change Role
+- Admin clicks "Change Role"
+- System shows role options
+- Admin selects new role
+- System warns of implications
+- Admin confirms
+- Role updated
+
+## Exceptions
+
+- E1: Firestore error - retry
+- E2: User not found
+- E3: Cannot disable self
+- E4: Cannot disable last admin
+
+## Business Rules
+
+- BR-01: Only admin can manage users
+- BR-02: Cannot disable own account
+- BR-03: Cannot disable last admin
+- BR-04: Role changes require confirmation
+- BR-05: All actions logged
+- BR-06: Disabled users cannot login
+
+## Non-Functional Requirements
+
+- User list loads in < 2 seconds
+- Search results in < 500 ms
+- Pagination for 100+ users
+
+## Related Use Cases
+
+- UC-18: Admin Login
+- UC-22: Manage Societies
+- UC-12: Organizer Login
+
+## UI Reference
+
+Screens: Users List, User Details
+
+## Use Case Diagram
+
+![UC-21 Manage Users Diagram](diagrams/UC-21_Manage_Users.png)
+
+---
+
+Document Version: 1.0
+Last Updated: [Aaj ki date]
+Author: [Aapka naam]
+Status: Draft

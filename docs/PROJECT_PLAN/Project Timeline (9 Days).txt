@@ -1,0 +1,50 @@
+# Project Timeline (9 Days)
+
+## Day-by-Day Timeline
+
+### Day 1: Planning
+- Morning: Project Plan (2 hours)
+- Afternoon: SDD (3 hours)
+- Evening: Verify + Setup Firebase account
+
+### Day 2: Setup
+- Morning: Firebase project creation (2 hours)
+- Afternoon: Firestore collections (2 hours)
+- Evening: Flutter project + structure (6 hours)
+
+### Day 3: Authentication
+- Morning: Splash + Login screen (4 hours)
+- Afternoon: Signup screen (4 hours)
+- Evening: Home screen + navigation (4 hours)
+
+### Day 4: Events
+- Morning: Events list + details (4 hours)
+- Afternoon: Registration flow (4 hours)
+- Evening: My Events + testing (4 hours)
+
+### Day 5: Features
+- Morning: QR code generation (3 hours)
+- Afternoon: Announcements (3 hours)
+- Evening: Admin panel setup (6 hours)
+
+### Day 6: Admin + Integration
+- Morning: Event approval (4 hours)
+- Afternoon: View registrations (4 hours)
+- Evening: Integration testing (4 hours)
+
+### Day 7: Testing
+- Morning: Feature testing (4 hours)
+- Afternoon: Bug fixes (4 hours)
+- Evening: UI polish (4 hours)
+
+### Day 8: Documentation
+- Morning: Test Plan + Manuals (4 hours)
+- Afternoon: Deployment Guide (4 hours)
+- Evening: Final Report (4 hours)
+
+### Day 9: Deployment
+- Morning: APK build + deploy (3 hours)
+- Afternoon: Web deployment (3 hours)
+- Evening: Final presentation prep (4 hours)
+
+## Gantt Chart (Text)

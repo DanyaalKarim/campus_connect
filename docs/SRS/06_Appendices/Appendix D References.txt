@@ -1,0 +1,94 @@
+# Appendix D: References
+
+## D.1 Primary References
+
+1. CampusConnect Project Proposal
+2. Mobile Application Development (MAD) Course Guide
+3. IEEE 830-1998 - Software Requirements Specifications
+4. ISO/IEC 25010 - Software Quality Model
+
+## D.2 Technical Documentation
+
+Flutter:
+- https://flutter.dev/docs
+- https://api.flutter.dev
+- https://dart.dev/guides
+
+Firebase:
+- https://firebase.google.com/docs
+- https://firebase.google.com/docs/firestore
+- https://firebase.google.com/docs/auth
+- https://firebase.google.com/docs/storage
+- https://firebase.google.com/docs/cloud-messaging
+
+Android:
+- https://developer.android.com
+- https://material.io/design
+
+## D.3 Flutter Packages
+
+| Package | Purpose |
+|---------|---------|
+| firebase_core | Firebase initialization |
+| firebase_auth | Authentication |
+| cloud_firestore | Database |
+| firebase_storage | File storage |
+| firebase_messaging | Push notifications |
+| qr_flutter | QR generation |
+| mobile_scanner | QR scanning |
+| provider | State management |
+| go_router | Navigation |
+| intl | Localization |
+| image_picker | Image selection |
+| cached_network_image | Image caching |
+| pdf | PDF generation |
+| printing | PDF printing |
+
+## D.4 Standards
+
+| Standard | Description |
+|----------|-------------|
+| IEEE 830-1998 | SRS Standard |
+| ISO/IEC 25010 | Quality Model |
+| Material Design 3 | UI Guidelines |
+| WCAG 2.1 | Accessibility |
+| ISO 8601 | Date Format |
+| RFC 5322 | Email Format |
+
+## D.5 Academic References
+
+1. Pressman, R. S. (2014). Software Engineering: A Practitioner's Approach
+2. Sommerville, I. (2015). Software Engineering
+3. Wiegers, K., & Beatty, J. (2013). Software Requirements
+4. Cockburn, A. (2000). Writing Effective Use Cases
+5. Martin, R. C. (2008). Clean Code
+
+## D.6 Related Documents
+
+| Document | Location |
+|----------|----------|
+| Project Proposal | CampusConnect_Project_Proposal.pdf |
+| SRS | docs/SRS/ |
+| SDD | docs/SDD/ |
+| Test Plan | docs/TEST_PLAN/ |
+| User Manuals | docs/USER_MANUALS/ |
+
+## D.7 Tools Used
+
+| Tool | Purpose |
+|------|---------|
+| Flutter SDK | Development |
+| Android Studio | IDE |
+| Firebase Console | Backend |
+| Git & GitHub | Version control |
+| VS Code | Documentation |
+| Figma | UI Design |
+| PlantUML | UML diagrams |
+| Draw.io | Diagrams |
+
+---
+
+Document Version: 1.0
+Last Updated: [Aaj ki date]
+Author: [Aapka naam]
+Status: Draft

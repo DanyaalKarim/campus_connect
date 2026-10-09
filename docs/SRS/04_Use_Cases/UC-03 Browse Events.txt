@@ -1,0 +1,94 @@
+# UC-03: Browse Events
+
+## Use Case Information
+
+| Field | Value |
+|-------|-------|
+| Use Case ID | UC-03 |
+| Use Case Name | Browse Events |
+| Actor | Student |
+| Priority | High |
+| Complexity | Low |
+
+## Description
+
+A student browses all approved university events to discover events of interest.
+
+## Preconditions
+
+1. Student is logged in
+2. Internet connection available
+3. At least one approved event exists
+
+## Postconditions
+
+1. Events list displayed
+2. Student can tap for details
+
+## Main Flow
+
+1. Student opens app
+2. Student taps "Events" tab in bottom nav
+3. System fetches approved events from Firestore
+4. System sorts events by date (upcoming first)
+5. System displays events as cards with poster, title, date, venue, category
+6. Student scrolls to see more events
+
+## Alternative Flows
+
+### A1: No Events Available
+- At step 3, no events found
+- System shows "No events available"
+- Use case ends
+
+### A2: Network Error
+- At step 3, network fails
+- System shows cached events (if any)
+- System shows "Offline mode" banner
+
+### A3: Loading State
+- At step 3, while loading
+- System shows shimmer/skeleton loader
+
+### A4: Refresh
+- Student pulls down to refresh
+- System re-fetches events
+
+## Exceptions
+
+- E1: Firestore error - show error message
+- E2: Timeout - show retry button
+
+## Business Rules
+
+- BR-01: Only show approved events
+- BR-02: Sort by date ascending
+- BR-03: Show 50 events per page
+- BR-04: Hide past events by default
+
+## Non-Functional Requirements
+
+- List loads in < 1.5 seconds
+- Scrolling at 60 FPS
+- Images load lazily
+
+## Related Use Cases
+
+- UC-04: Search Events
+- UC-05: View Event Details
+- UC-06: Register Event
+
+## UI Reference
+
+Screens: Events List
+
+## Use Case Diagram
+
+![UC-03 Browse Events Diagram](diagrams/UC-03_Browse_Events.png)
+
+---
+
+Document Version: 1.0
+Last Updated: [Aaj ki date]
+Author: [Aapka naam]
+Status: Draft

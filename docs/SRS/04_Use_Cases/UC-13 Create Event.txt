@@ -1,0 +1,114 @@
+# UC-13: Create Event
+
+## Use Case Information
+
+| Field | Value |
+|-------|-------|
+| Use Case ID | UC-13 |
+| Use Case Name | Create Event |
+| Actor | Organizer |
+| Priority | High |
+| Complexity | Medium |
+
+## Description
+
+An organizer creates a new event through the web dashboard. The event is submitted for admin approval before being published to students.
+
+## Preconditions
+
+1. Organizer is logged in
+2. Organizer has permission to create events
+3. Internet connection available
+
+## Postconditions
+
+1. Event created in Firestore with status "pending"
+2. Admin notified for approval
+3. Organizer can view event in their dashboard
+
+## Main Flow
+
+1. Organizer opens dashboard
+2. Organizer clicks "Create Event"
+3. System shows event creation form
+4. Organizer enters:
+   - Title
+   - Description
+   - Category
+   - Date and time
+   - Venue
+   - Capacity
+   - Registration deadline
+   - Speaker info
+5. Organizer uploads event poster
+6. Organizer clicks "Submit for Approval"
+7. System validates all fields
+8. System uploads poster to Firebase Storage
+9. System creates event document with status "pending"
+10. System sends notification to admin
+11. System shows success message
+
+## Alternative Flows
+
+### A1: Missing Required Fields
+- At step 7, required fields empty
+- System highlights empty fields
+- Return to step 4
+
+### A2: Invalid Date
+- At step 7, date is in the past
+- System shows "Date must be in future"
+- Return to step 4
+
+### A3: Poster Too Large
+- At step 8, image > 5MB
+- System shows "Image too large (max 5MB)"
+- Return to step 5
+
+### A4: Network Error
+- At step 8, network fails
+- System shows "Check your connection"
+- Return to step 6
+
+## Exceptions
+
+- E1: Storage upload fails - show retry
+- E2: Firestore write error - rollback
+- E3: Validation timeout
+
+## Business Rules
+
+- BR-01: Title max 100 characters
+- BR-02: Description max 2000 characters
+- BR-03: Event date must be in future
+- BR-04: Registration deadline must be before event date
+- BR-05: Capacity must be positive integer
+- BR-06: Poster required (max 5MB)
+- BR-07: All events require admin approval
+
+## Non-Functional Requirements
+
+- Form loads in < 2 seconds
+- Image upload < 5 seconds
+- Form saves draft automatically
+
+## Related Use Cases
+
+- UC-12: Organizer Login
+- UC-19: Approve Event (Admin)
+- UC-14: Edit Event
+
+## UI Reference
+
+Screens: Create Event Form
+
+## Use Case Diagram
+
+![UC-13 Create Event Diagram](diagrams/UC-13_Create_Event.png)
+
+---
+
+Document Version: 1.0
+Last Updated: [Aaj ki date]
+Author: [Aapka naam]
+Status: Draft

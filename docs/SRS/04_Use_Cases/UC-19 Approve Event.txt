@@ -1,0 +1,110 @@
+# UC-19: Approve Event
+
+## Use Case Information
+
+| Field | Value |
+|-------|-------|
+| Use Case ID | UC-19 |
+| Use Case Name | Approve Event |
+| Actor | Admin |
+| Priority | High |
+| Complexity | Low |
+
+## Description
+
+An admin reviews a pending event submitted by an organizer and approves it, making it visible to all students.
+
+## Preconditions
+
+1. Admin is logged in
+2. At least one event is in "pending" status
+
+## Postconditions
+
+1. Event status changed to "approved"
+2. Event visible to students
+3. Organizer notified
+4. Event appears in browse events
+
+## Main Flow
+
+1. Admin opens admin dashboard
+2. Admin clicks "Pending Events"
+3. System fetches all pending events
+4. System displays list with event details
+5. Admin selects an event to review
+6. System shows full event details
+7. Admin reviews content:
+   - Title and description
+   - Date, time, venue
+   - Poster
+   - Speaker info
+   - Capacity and deadline
+8. Admin clicks "Approve"
+9. System updates event status to "approved"
+10. System sends notification to organizer
+11. System shows success message
+12. Event becomes visible to students
+
+## Alternative Flows
+
+### A1: Request Changes
+- Admin clicks "Request Changes"
+- System prompts for reason
+- Admin enters reason
+- System notifies organizer
+- Event status stays "pending"
+- Use case ends
+
+### A2: Reject Event
+- Admin clicks "Reject"
+- System redirects to UC-20 (Reject Event)
+
+### A3: No Pending Events
+- System shows "No pending events"
+- Use case ends
+
+### A4: Inappropriate Content
+- Admin finds inappropriate content
+- Admin rejects event (UC-20)
+
+## Exceptions
+
+- E1: Firestore write error - retry
+- E2: Notification failure - log error
+- E3: Event already approved/rejected
+
+## Business Rules
+
+- BR-01: Only admin can approve events
+- BR-02: Event must be in "pending" status
+- BR-03: Approval is final (no undo without rejection)
+- BR-04: Organizer notified immediately
+- BR-05: Event appears in student feed after approval
+
+## Non-Functional Requirements
+
+- Approval completes in < 2 seconds
+- Notification delivered in < 5 seconds
+- Approval action logged
+
+## Related Use Cases
+
+- UC-13: Create Event (Organizer)
+- UC-20: Reject Event
+- UC-03: Browse Events (Student)
+
+## UI Reference
+
+Screens: Pending Events List, Event Review
+
+## Use Case Diagram
+
+![UC-19 Approve Event Diagram](diagrams/UC-19_Approve_Event.png)
+
+---
+
+Document Version: 1.0
+Last Updated: [Aaj ki date]
+Author: [Aapka naam]
+Status: Draft

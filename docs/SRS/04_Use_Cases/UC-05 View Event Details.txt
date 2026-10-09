@@ -1,0 +1,91 @@
+# UC-05: View Event Details
+
+## Use Case Information
+
+| Field | Value |
+|-------|-------|
+| Use Case ID | UC-05 |
+| Use Case Name | View Event Details |
+| Actor | Student |
+| Priority | High |
+| Complexity | Low |
+
+## Description
+
+A student views full details of an event including description, date, venue, speaker, and registration information.
+
+## Preconditions
+
+1. Student is logged in
+2. Event exists and is approved
+
+## Postconditions
+
+1. Full event information displayed
+2. Register button available
+
+## Main Flow
+
+1. Student taps event card
+2. System fetches event data from Firestore
+3. System displays event details:
+   - Title and description
+   - Date, time, and venue
+   - Organizer information
+   - Speaker information
+   - Capacity and registered count
+   - Registration deadline
+4. Student reads details
+
+## Alternative Flows
+
+### A1: Event Full
+- System shows "Registration Full" instead of Register button
+
+### A2: Deadline Passed
+- System shows "Registration Closed"
+
+### A3: Already Registered
+- System shows "View Ticket" instead of Register
+
+### A4: Event Completed
+- System shows "Event Completed" and feedback option
+
+## Exceptions
+
+- E1: Event deleted - show "Event not found"
+- E2: Network error - show cached data
+
+## Business Rules
+
+- BR-01: Show poster image
+- BR-02: Show registered/capacity count
+- BR-03: Show registration deadline
+- BR-04: Show speaker info if available
+
+## Non-Functional Requirements
+
+- Page loads in < 1.5 seconds
+- Image loads lazily
+- Details scrollable
+
+## Related Use Cases
+
+- UC-03: Browse Events
+- UC-06: Register Event
+- UC-07: View QR Ticket
+
+## UI Reference
+
+Screens: Event Details
+
+## Use Case Diagram
+
+![UC-05 View Event Details Diagram](diagrams/UC-05_View_Event_Details.png)
+
+---
+
+Document Version: 1.0
+Last Updated: [Aaj ki date]
+Author: [Aapka naam]
+Status: Draft

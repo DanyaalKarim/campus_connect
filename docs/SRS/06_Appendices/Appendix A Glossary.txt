@@ -1,0 +1,191 @@
+# Appendix A: Glossary
+
+## A.1 Overview
+
+This glossary provides definitions of technical terms, abbreviations, and domain-specific vocabulary used throughout the CampusConnect SRS document.
+
+## A.2 Technical Terms
+
+### API (Application Programming Interface)
+A set of rules and protocols that allows different software applications to communicate with each other. In CampusConnect, Firebase APIs are used for backend communication.
+
+### AVD (Android Virtual Device)
+A virtual device configuration that defines the characteristics of an Android phone, tablet, or other device that you want to simulate in the Android Emulator. Used for testing CampusConnect without a physical device.
+
+### Backend
+The server-side part of an application that handles data processing, database operations, and business logic. CampusConnect's backend is Firebase.
+
+### Cloud Firestore
+A flexible, scalable NoSQL cloud database from Google Firebase used for storing and syncing data for CampusConnect in real-time.
+
+### CRUD (Create, Read, Update, Delete)
+The four basic operations of persistent storage. CampusConnect performs CRUD operations on all collections.
+
+### Dashboard
+A web-based interface for managing data and operations. CampusConnect has two dashboards: Organizer Dashboard and Admin Dashboard.
+
+### Debug
+The process of identifying and removing errors from software.
+
+### Deployment
+The process of making an application available for use. CampusConnect will be deployed to Google Play Store and Firebase Hosting.
+
+### Emulator
+Software that allows one computer system to behave like another. Used for testing Android apps.
+
+### Endpoint
+A specific URL where an API can be accessed.
+
+### FCM (Firebase Cloud Messaging)
+A cross-platform messaging solution that lets you reliably send messages at no cost. Used for push notifications in CampusConnect.
+
+### Firestore Rules
+Security rules that control access to Cloud Firestore data based on authentication and user roles.
+
+### Firebase
+Google's mobile and web application development platform that provides authentication, database, storage, and messaging services.
+
+### Flutter
+Google's UI toolkit for building natively compiled applications for mobile, web, and desktop from a single codebase. CampusConnect is built with Flutter.
+
+### Flutter Web
+A version of Flutter that compiles Dart code to run in web browsers.
+
+### Git
+A distributed version control system for tracking changes in source code. Used for CampusConnect development.
+
+### GitHub
+A web-based platform for version control and collaboration using Git. CampusConnect code is hosted here.
+
+### HTTPS (HyperText Transfer Protocol Secure)
+A secure version of HTTP that encrypts communication between client and server.
+
+### IDE (Integrated Development Environment)
+Software that provides comprehensive facilities for software development. Android Studio is used for CampusConnect.
+
+### JSON (JavaScript Object Notation)
+A lightweight data-interchange format used for API communication.
+
+### Material Design
+Google's design system that provides guidelines for creating visually appealing and consistent user interfaces.
+
+### MVP (Minimum Viable Product)
+A version of a product with just enough features to be usable by early customers who can then provide feedback for future development.
+
+### NoSQL
+A type of database that does not use the traditional tabular relations. Firestore is a NoSQL database.
+
+### Push Notification
+A message that pops up on a mobile device, sent by an app even when the app is not open. Used for important announcements in CampusConnect.
+
+### QR Code (Quick Response Code)
+A two-dimensional barcode that can be scanned by a smartphone camera. Used for event tickets and attendance in CampusConnect.
+
+### Real-time Updates
+Data synchronization that happens immediately when changes occur. Firestore provides real-time updates.
+
+### Repository
+A storage location for software packages. Also, a Git repository stores code history.
+
+### SDK (Software Development Kit)
+A collection of software development tools. Firebase SDK and Flutter SDK are used in CampusConnect.
+
+### SRS (Software Requirements Specification)
+A document that describes what a software system should do. This document.
+
+### State Management
+Managing the state of an application. Provider pattern is used in CampusConnect.
+
+### UI (User Interface)
+The visual elements through which a user interacts with an application.
+
+### UX (User Experience)
+The overall experience of a user when interacting with an application.
+
+### Widget
+A reusable UI component in Flutter. CampusConnect uses many widgets for buttons, cards, forms, etc.
+
+## A.3 Acronyms
+
+| Acronym | Full Form |
+|---------|-----------|
+| ACM | Association for Computing Machinery |
+| API | Application Programming Interface |
+| AVD | Android Virtual Device |
+| CRUD | Create, Read, Update, Delete |
+| CSV | Comma-Separated Values |
+| FCM | Firebase Cloud Messaging |
+| GDPR | General Data Protection Regulation |
+| HTTPS | HyperText Transfer Protocol Secure |
+| IDE | Integrated Development Environment |
+| IEEE | Institute of Electrical and Electronics Engineers |
+| ISO | International Organization for Standardization |
+| JSON | JavaScript Object Notation |
+| MAD | Mobile Application Development |
+| MVP | Minimum Viable Product |
+| NFR | Non-Functional Requirement |
+| NoSQL | Not Only SQL |
+| PDF | Portable Document Format |
+| QR | Quick Response |
+| REST | Representational State Transfer |
+| SDK | Software Development Kit |
+| SRS | Software Requirements Specification |
+| TLS | Transport Layer Security |
+| UI | User Interface |
+| UML | Unified Modeling Language |
+| URL | Uniform Resource Locator |
+| UX | User Experience |
+| WCAG | Web Content Accessibility Guidelines |
+
+## A.4 Domain Terms
+
+### Admin
+A university administrator who manages the CampusConnect platform, approves events, and manages users.
+
+### Announcement
+An official message sent by the university, department, or society to students.
+
+### Attendance
+The record of a student's presence at an event, marked by scanning their QR code.
+
+### Certificate
+A digital document awarded to a student after attending an event, generated as a PDF.
+
+### Event
+Any university activity such as seminar, workshop, competition, sports, or cultural program.
+
+### Feedback
+A rating (1-5 stars) and optional comment submitted by a student after attending an event.
+
+### Organizer
+A member of a society or department who creates and manages events on CampusConnect.
+
+### Registration
+The act of a student signing up for an event through the CampusConnect app.
+
+### Society
+A student organization (e.g., IEEE, ACM, sports club) that organizes events.
+
+### Student
+A registered user of the CampusConnect mobile app who browses events and registers for them.
+
+### Ticket
+A digital pass (with QR code) issued to a student after registering for an event.
+
+## A.5 Terminology Conventions
+
+| Term | Meaning |
+|------|---------|
+| **Shall** | Mandatory requirement |
+| **Should** | Recommended requirement |
+| **May** | Optional requirement |
+| **Must** | Critical requirement |
+| **User** | Any of the three roles (student, organizer, admin) |
+| **System** | The CampusConnect platform |
+
+---
+
+Document Version: 1.0
+Last Updated: [Aaj ki date]
+Author: [Aapka naam]
+Status: Draft

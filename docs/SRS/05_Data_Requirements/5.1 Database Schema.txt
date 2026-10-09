@@ -1,0 +1,245 @@
+# 5.1 Database Schema
+
+## 5.1.1 Overview
+
+CampusConnect uses Cloud Firestore as its primary database. Firestore is a NoSQL document database organized into collections and documents. This section describes the complete database schema.
+
+## 5.1.2 Database Structure
+
+The CampusConnect database consists of 8 primary collections:
+
+1. users
+2. events
+3. registrations
+4. announcements
+5. attendance
+6. feedback
+7. societies
+8. certificates
+
+## 5.1.3 Collection: users
+
+Purpose: Store user account information for all roles.
+
+Document ID: Auto-generated Firebase Auth UID
+
+Fields:
+
+| Field | Type | Required | Description |
+|-------|------|----------|-------------|
+| uid | string | Yes | Firebase Auth UID |
+| name | string | Yes | User's full name |
+| email | string | Yes | User's email (unique) |
+| role | string | Yes | "student", "organizer", or "admin" |
+| studentId | string | No | University student ID |
+| department | string | No | Department name |
+| profileImage | string | No | Profile image URL |
+| fcmToken | string | No | Push notification token |
+| isActive | boolean | Yes | Account status |
+| createdAt | timestamp | Yes | Account creation date |
+| updatedAt | timestamp | No | Last update date |
+
+Indexes:
+- email (ascending, unique)
+- role + isActive (composite)
+- department (ascending)
+
+## 5.1.4 Collection: events
+
+Purpose: Store event information created by organizers.
+
+Document ID: Auto-generated
+
+Fields:
+
+| Field | Type | Required | Description |
+|-------|------|----------|-------------|
+| eventId | string | Yes | Unique event ID |
+| title | string | Yes | Event title |
+| description | string | Yes | Full description |
+| category | string | Yes | Event category |
+| date | timestamp | Yes | Event date |
+| time | string | Yes | Event time |
+| venue | string | Yes | Location |
+| capacity | number | Yes | Max attendees |
+| registeredCount | number | Yes | Current registrations |
+| organizerId | string | Yes | Organizer UID |
+| organizerName | string | Yes | Organizer name |
+| posterUrl | string | No | Event poster URL |
+| speaker | string | No | Speaker info |
+| registrationDeadline | timestamp | Yes | Last date to register |
+| status | string | Yes | "pending", "approved", "rejected", "completed" |
+| rejectionReason | string | No | Reason if rejected |
+| approvedBy | string | No | Admin UID |
+| approvedAt | timestamp | No | Approval date |
+| createdAt | timestamp | Yes | Creation date |
+| updatedAt | timestamp | No | Last update |
+
+Indexes:
+- status + date (composite)
+- category + status (composite)
+- organizerId + status (composite)
+- date (ascending)
+
+## 5.1.5 Collection: registrations
+
+Purpose: Store event registrations by students.
+
+Document ID: Auto-generated
+
+Fields:
+
+| Field | Type | Required | Description |
+|-------|------|----------|-------------|
+| regId | string | Yes | Registration ID |
+| eventId | string | Yes | Reference to event |
+| eventTitle | string | Yes | Cached event title |
+| studentId | string | Yes | Student UID |
+| studentName | string | Yes | Cached student name |
+| studentEmail | string | Yes | Cached student email |
+| studentNumber | string | Yes | Cached student ID |
+| status | string | Yes | "registered", "attended", "cancelled" |
+| qrCode | string | Yes | Unique QR code |
+| registeredAt | timestamp | Yes | Registration time |
+| attendedAt | timestamp | No | Attendance time |
+| cancelledAt | timestamp | No | Cancellation time |
+
+Indexes:
+- eventId + status (composite)
+- studentId + status (composite)
+- qrCode (ascending, unique)
+
+## 5.1.6 Collection: announcements
+
+Purpose: Store official announcements from university, departments, and societies.
+
+Document ID: Auto-generated
+
+Fields:
+
+| Field | Type | Required | Description |
+|-------|------|----------|-------------|
+| annId | string | Yes | Announcement ID |
+| title | string | Yes | Title |
+| description | string | Yes | Full content |
+| category | string | Yes | Category |
+| priority | string | Yes | "low", "medium", "high" |
+| createdBy | string | Yes | Creator UID |
+| createdByName | string | Yes | Creator name |
+| targetEventId | string | No | Event ID if event-specific |
+| createdAt | timestamp | Yes | Creation time |
+
+Indexes:
+- category + createdAt (composite)
+- createdAt (descending)
+
+## 5.1.7 Collection: attendance
+
+Purpose: Store event attendance records.
+
+Document ID: Auto-generated
+
+Fields:
+
+| Field | Type | Required | Description |
+|-------|------|----------|-------------|
+| attId | string | Yes | Attendance ID |
+| eventId | string | Yes | Reference to event |
+| studentId | string | Yes | Reference to student |
+| regId | string | Yes | Reference to registration |
+| scannedBy | string | Yes | Organizer UID |
+| scannedAt | timestamp | Yes | Scan time |
+| status | string | Yes | "present" or "absent" |
+
+Indexes:
+- eventId + studentId (composite, unique)
+- eventId + status (composite)
+
+## 5.1.8 Collection: feedback
+
+Purpose: Store student feedback for attended events.
+
+Document ID: Auto-generated
+
+Fields:
+
+| Field | Type | Required | Description |
+|-------|------|----------|-------------|
+| fbId | string | Yes | Feedback ID |
+| eventId | string | Yes | Reference to event |
+| studentId | string | Yes | Reference to student |
+| studentName | string | Yes | Cached name |
+| rating | number | Yes | 1-5 stars |
+| comment | string | No | Optional comment |
+| createdAt | timestamp | Yes | Submission time |
+| updatedAt | timestamp | No | Edit time |
+
+Indexes:
+- eventId + rating (composite)
+- studentId + eventId (composite, unique)
+
+## 5.1.9 Collection: societies
+
+Purpose: Store society information.
+
+Document ID: Auto-generated
+
+Fields:
+
+| Field | Type | Required | Description |
+|-------|------|----------|-------------|
+| societyId | string | Yes | Society ID |
+| name | string | Yes | Society name (unique) |
+| description | string | Yes | Description |
+| logoUrl | string | No | Logo image URL |
+| status | string | Yes | "active", "pending", "disabled" |
+| headOrganizerId | string | No | Main organizer UID |
+| memberCount | number | Yes | Total members |
+| createdBy | string | Yes | Admin UID |
+| createdAt | timestamp | Yes | Creation time |
+
+Indexes:
+- name (ascending, unique)
+- status (ascending)
+
+## 5.1.10 Collection: certificates
+
+Purpose: Store generated certificates for event attendees.
+
+Document ID: Auto-generated
+
+Fields:
+
+| Field | Type | Required | Description |
+|-------|------|----------|-------------|
+| certId | string | Yes | Certificate ID |
+| certificateNumber | string | Yes | Human-readable ID |
+| eventId | string | Yes | Reference to event |
+| eventTitle | string | Yes | Cached event title |
+| studentId | string | Yes | Reference to student |
+| studentName | string | Yes | Cached name |
+| certificateUrl | string | Yes | PDF URL in Storage |
+| issuedAt | timestamp | Yes | Issue date |
+| downloadedAt | timestamp | No | Last download |
+
+Indexes:
+- studentId (ascending)
+- eventId (ascending)
+- certificateNumber (unique)
+
+## 5.1.11 Data Relationships
+
+User (student) -> Registration -> Event
+User (organizer) -> Event -> Registration -> Attendance
+User (admin) -> Event Approval
+Event -> Feedback
+Event -> Certificates
+Society -> Organizer (users)
+Event -> Announcement
+
+---
+
+Document Version: 1.0
+Last Updated: [Aaj ki date]
+Author: [Aapka naam]
+Status: Draft

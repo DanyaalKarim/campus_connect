@@ -1,0 +1,96 @@
+# UC-16: View Statistics
+
+## Use Case Information
+
+| Field | Value |
+|-------|-------|
+| Use Case ID | UC-16 |
+| Use Case Name | View Statistics |
+| Actor | Organizer |
+| Priority | Medium |
+| Complexity | Medium |
+
+## Description
+
+An organizer views statistics for their events including registrations, attendance, and feedback summary.
+
+## Preconditions
+
+1. Organizer is logged in
+2. Organizer has at least one event
+
+## Postconditions
+
+1. Statistics dashboard displayed
+2. Data available for export
+
+## Main Flow
+
+1. Organizer opens dashboard
+2. Organizer clicks "Statistics"
+3. System fetches event data:
+   - Total events
+   - Total registrations
+   - Total attended
+   - Attendance rate
+   - Average rating
+4. System displays statistics as numbers and charts
+5. Organizer can select specific event for detailed stats
+6. Organizer can export as CSV/PDF
+
+## Alternative Flows
+
+### A1: No Events
+- System shows "No events yet"
+- Use case ends
+
+### A2: No Registrations
+- System shows "No registrations yet"
+- Shows event info
+
+### A3: No Feedback
+- System shows "No feedback yet"
+
+### A4: Export
+- Organizer clicks "Export"
+- System generates file
+- File downloads
+
+## Exceptions
+
+- E1: Firestore error - show retry
+- E2: Export failure - show error
+
+## Business Rules
+
+- BR-01: Statistics update in real-time
+- BR-02: Only show data for organizer's events
+- BR-03: Charts use bar/line/pie format
+- BR-04: Data can be filtered by date range
+
+## Non-Functional Requirements
+
+- Dashboard loads in < 2 seconds
+- Charts render smoothly
+- Real-time updates
+
+## Related Use Cases
+
+- UC-13: Create Event
+- UC-15: Scan QR Attendance
+- UC-10: Submit Feedback (Student)
+
+## UI Reference
+
+Screens: Statistics Dashboard, Event Details
+
+## Use Case Diagram
+
+![UC-16 View Statistics Diagram](diagrams/UC-16_View_Statistics.png)
+
+---
+
+Document Version: 1.0
+Last Updated: [Aaj ki date]
+Author: [Aapka naam]
+Status: Draft

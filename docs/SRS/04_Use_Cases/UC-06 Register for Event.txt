@@ -1,0 +1,114 @@
+# UC-06: Register for Event
+
+## Use Case Information
+
+| Field | Value |
+|-------|-------|
+| Use Case ID | UC-06 |
+| Use Case Name | Register for Event |
+| Actor | Student |
+| Priority | High |
+| Complexity | Medium |
+
+## Description
+
+A student registers for an approved event. The system creates a registration record and generates a unique QR ticket.
+
+## Preconditions
+
+1. Student is logged in
+2. Event exists and is approved
+3. Registration deadline not passed
+4. Event capacity not full
+5. Student not already registered
+
+## Postconditions
+
+1. Registration record created in Firestore
+2. QR code generated and stored
+3. Event added to My Events
+4. Confirmation shown to student
+
+## Main Flow
+
+1. Student views event details
+2. Student taps "Register Now" button
+3. System validates eligibility:
+   - User logged in
+   - Event approved
+   - Deadline not passed
+   - Capacity not full
+   - Not already registered
+4. System creates registration document
+5. System generates unique QR code
+6. System increments event registered count
+7. System shows confirmation screen
+8. System displays QR ticket
+
+## Alternative Flows
+
+### A1: Event Full
+- At step 3, capacity full
+- System shows "Event is full"
+- Use case ends
+
+### A2: Already Registered
+- At step 3, student already registered
+- System shows "You are already registered"
+- System shows existing QR ticket
+- Use case ends
+
+### A3: Deadline Passed
+- At step 3, deadline passed
+- System shows "Registration closed"
+- Use case ends
+
+### A4: Network Error
+- At step 4, network fails
+- System shows "Please check your connection"
+- Return to step 2
+
+### A5: Registration Closed by Organizer
+- At step 3, registration manually closed
+- System shows "Registration closed by organizer"
+- Use case ends
+
+## Exceptions
+
+- E1: Firestore write error - rollback and show error
+- E2: QR generation fails - retry
+- E3: Duplicate registration - prevent
+
+## Business Rules
+
+- BR-01: One registration per student per event
+- BR-02: QR code must be unique
+- BR-03: Registration count updated atomically
+- BR-04: Registration cannot be cancelled after deadline
+
+## Non-Functional Requirements
+
+- Registration completes in < 2 seconds
+- QR code generated within 1 second
+- Confirmation shown immediately
+
+## Related Use Cases
+
+- UC-05: View Event Details
+- UC-07: View QR Ticket
+- UC-08: View My Events
+
+## UI Reference
+
+Screens: Event Details, Confirmation, QR Ticket
+
+## Use Case Diagram
+
+![UC-06 Register Event Diagram](diagrams/UC-06_Register_Event.png)
+
+---
+
+Document Version: 1.0
+Last Updated: [Aaj ki date]
+Author: [Aapka naam]
+Status: Draft

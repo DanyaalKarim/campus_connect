@@ -1,0 +1,91 @@
+# UC-11: View Certificates
+
+## Use Case Information
+
+| Field | Value |
+|-------|-------|
+| Use Case ID | UC-11 |
+| Use Case Name | View Certificates |
+| Actor | Student |
+| Priority | Medium |
+| Complexity | Low |
+
+## Description
+
+A student views and downloads certificates for events they attended. Certificates are generated automatically after event completion.
+
+## Preconditions
+
+1. Student is logged in
+2. Student attended at least one event
+3. Certificate has been generated
+
+## Postconditions
+
+1. List of certificates displayed
+2. Certificate can be downloaded as PDF
+
+## Main Flow
+
+1. Student opens Profile
+2. Student taps "My Certificates"
+3. System fetches certificates from Firestore
+4. System displays certificate list with:
+   - Event title
+   - Date attended
+   - Certificate status
+5. Student taps a certificate
+6. System shows certificate preview
+7. Student taps "Download"
+8. System generates/downloads PDF
+
+## Alternative Flows
+
+### A1: No Certificates
+- System shows "No certificates yet"
+- Use case ends
+
+### A2: Certificate Not Ready
+- System shows "Certificate pending"
+- Use case ends
+
+### A3: Download
+- PDF saved to device
+- System shows success message
+
+## Exceptions
+
+- E1: Network error - retry
+- E2: PDF generation error - report
+
+## Business Rules
+
+- BR-01: Certificates auto-generated after event
+- BR-02: Only for attended students
+- BR-03: PDF format with unique certificate number
+- BR-04: Certificate can be re-downloaded anytime
+
+## Non-Functional Requirements
+
+- List loads in < 1.5 seconds
+- PDF generation < 3 seconds
+- PDF size < 500 KB
+
+## Related Use Cases
+
+- UC-08: View My Events
+
+## UI Reference
+
+Screens: Certificates List, Certificate Preview
+
+## Use Case Diagram
+
+![UC-11 View Certificates Diagram](diagrams/UC-11_View_Certificates.png)
+
+---
+
+Document Version: 1.0
+Last Updated: [Aaj ki date]
+Author: [Aapka naam]
+Status: Draft

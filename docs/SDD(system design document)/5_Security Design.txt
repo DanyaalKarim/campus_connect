@@ -1,0 +1,570 @@
+# 5. Security Design
+
+## 5.1 Overview
+
+This document defines the security architecture for CampusConnect, including authentication, authorization, data protection, and security best practices. Firebase provides most security features out of the box, but proper configuration is required.
+
+## 5.2 Security Architecture
+
++---------------------------------------------------+
+|              SECURITY LAYERS                       |
++---------------------------------------------------+
+|  1. Network Security (HTTPS/TLS)                   |
+|  2. Authentication (Firebase Auth)                 |
+|  3. Authorization (Firestore Rules)                |
+|  4. Data Protection (Encryption)                   |
+|  5. Client Security (Input Validation)             |
++---------------------------------------------------+
+
+## 5.3 Authentication Security
+
+### 5.3.1 Firebase Authentication
+
+Provider: Firebase Auth
+Method: Email/Password
+Why: Secure, reliable, easy to integrate
+
+Features:
+- Password hashing (bcrypt)
+- Session tokens
+- Token refresh
+- Multi-device support
+- Account recovery
+
+### 5.3.2 Password Policy
+
+Requirements:
+- Minimum 6 characters
+- Recommended 8+ characters
+- No maximum limit
+- Case sensitive
+- Must not be common password
+
+Rules:
+- Firebase Auth enforces minimum length
+- Application may enforce stronger rules
+- Password reset via email
+
+### 5.3.3 Session Management
+
+Session Token:
+- Type: JWT (JSON Web Token)
+- Lifetime: 1 hour (auto-refresh)
+- Persistence: 30 days on device
+- Storage: Secure (Flutter secure storage)
+
+Session Rules:
+- Auto logout after 30 days inactivity
+- Logout clears local session
+- Re-authentication for sensitive actions
+
+### 5.3.4 Email Verification
+
+Status: Optional (Phase 2)
+
+Future Implementation:
+- Send verification email on signup
+- Verify before accessing features
+- Resend option
+
+## 5.4 Authorization (Role-Based Access Control)
+
+### 5.4.1 User Roles
+
+Three roles:
+1. Student  - Basic access (view, register)
+2. Organizer - Event management (create, scan)
+3. Admin    - Full access (approve, manage)
+
+### 5.4.2 Permissions Matrix
+
+| Action | Student | Organizer | Admin |
+|--------|---------|-----------|-------|
+| View Events | Yes | Yes | Yes |
+| Register for Event | Yes | No | No |
+| View Own Tickets | Yes | No | No |
+| Create Event | No | Yes | Yes |
+| Edit Own Event | No | Yes | Yes |
+| Scan QR Attendance | No | Yes | Yes |
+| Approve Events | No | No | Yes |
+| Manage Users | No | No | Yes |
+| Manage Societies | No | No | Yes |
+| View Reports | No | Yes (own) | Yes (all) |
+
+### 5.4.3 Firestore Security Rules
+
+Location: Firebase Console - Firestore - Rules
+
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    
+    function isSignedIn() {
+      return request.auth != null;
+    }
+    
+    function getUserRole() {
+      return get(/databases/$(database)/documents/users/$(request.auth.uid)).data.role;
+    }
+    
+    function isOwner(userId) {
+      return request.auth.uid == userId;
+    }
+    
+    function isAdmin() {
+      return isSignedIn() && getUserRole() == 'admin';
+    }
+    
+    function isOrganizer() {
+      return isSignedIn() && getUserRole() == 'organizer';
+    }
+    
+    function isStudent() {
+      return isSignedIn() && getUserRole() == 'student';
+    }
+    
+    // USERS COLLECTION
+    match /users/{userId} {
+      allow read: if isSignedIn();
+      allow create: if isSignedIn() && isOwner(userId);
+      allow update: if isSignedIn() && isOwner(userId);
+      allow delete: if isAdmin();
+    }
+    
+    // EVENTS COLLECTION
+    match /events/{eventId} {
+      allow read: if isSignedIn();
+      allow create: if isSignedIn() && (isOrganizer() || isAdmin());
+      allow update: if isSignedIn() && 
+                    (isAdmin() || 
+                     (isOrganizer() && resource.data.organizerId == request.auth.uid));
+      allow delete: if isAdmin();
+    }
+    
+    // REGISTRATIONS COLLECTION
+    match /registrations/{regId} {
+      allow read: if isSignedIn();
+      allow create: if isSignedIn() && isStudent();
+      allow update: if isSignedIn() && 
+                    (isOwner(resource.data.studentId) || 
+                     isOrganizer() || 
+                     isAdmin());
+      allow delete: if isSignedIn() && 
+                    (isOwner(resource.data.studentId) || isAdmin());
+    }
+    
+    // ANNOUNCEMENTS COLLECTION
+    match /announcements/{annId} {
+      allow read: if isSignedIn();
+      allow create: if isSignedIn() && (isOrganizer() || isAdmin());
+      allow update: if isSignedIn() && 
+                    (isAdmin() || 
+                     resource.data.createdBy == request.auth.uid);
+      allow delete: if isAdmin();
+    }
+    
+    // ATTENDANCE COLLECTION
+    match /attendance/{attId} {
+      allow read: if isSignedIn();
+      allow create: if isSignedIn() && (isOrganizer() || isAdmin());
+      allow update: if isSignedIn() && (isOrganizer() || isAdmin());
+      allow delete: if isAdmin();
+    }
+    
+    // FEEDBACK COLLECTION
+    match /feedback/{fbId} {
+      allow read: if isSignedIn();
+      allow create: if isSignedIn() && isStudent();
+      allow update: if isSignedIn() && 
+                    isOwner(resource.data.studentId);
+      allow delete: if isSignedIn() && 
+                    (isOwner(resource.data.studentId) || isAdmin());
+    }
+    
+    // SOCIETIES COLLECTION
+    match /societies/{socId} {
+      allow read: if isSignedIn();
+      allow create, update, delete: if isAdmin();
+    }
+    
+    // CERTIFICATES COLLECTION
+    match /certificates/{certId} {
+      allow read: if isSignedIn();
+      allow create: if isAdmin();
+      allow update: if isSignedIn() && 
+                    isOwner(resource.data.studentId);
+      allow delete: if isAdmin();
+    }
+  }
+}
+
+### 5.4.4 Storage Security Rules
+
+Location: Firebase Console - Storage - Rules
+
+rules_version = '2';
+service firebase.storage {
+  match /b/{bucket}/o {
+    
+    function isSignedIn() {
+      return request.auth != null;
+    }
+    
+    function getUserRole() {
+      return firestore.get(/databases/(default)/documents/users/$(request.auth.uid)).data.role;
+    }
+    
+    function isAdmin() {
+      return isSignedIn() && getUserRole() == 'admin';
+    }
+    
+    function isOrganizer() {
+      return isSignedIn() && getUserRole() == 'organizer';
+    }
+    
+    match /event_posters/{eventId} {
+      allow read: if true;
+      allow write: if isSignedIn() && (isOrganizer() || isAdmin());
+    }
+    
+    match /profile_images/{userId} {
+      allow read: if isSignedIn();
+      allow write: if isSignedIn() && request.auth.uid == userId;
+    }
+    
+    match /event_photos/{eventId}/{photoId} {
+      allow read: if isSignedIn();
+      allow write: if isSignedIn() && (isOrganizer() || isAdmin());
+    }
+    
+    match /certificates/{certId} {
+      allow read: if isSignedIn();
+      allow write: if isAdmin();
+    }
+  }
+}
+
+## 5.5 Data Protection
+
+### 5.5.1 Encryption
+
+In Transit:
+- Protocol: HTTPS/TLS 1.2+
+- All Firebase communication encrypted
+- No plain HTTP allowed
+
+At Rest:
+- Firestore: AES-256 (Google default)
+- Storage: AES-256 (Google default)
+- Backups: Encrypted
+
+### 5.5.2 Data Privacy
+
+Personal Data Collected:
+- Name (required)
+- Email (required)
+- Student ID (optional)
+- Department (optional)
+- Profile image (optional)
+
+Data NOT Collected:
+- Phone number
+- Address
+- Payment info
+- Location history
+- Sensitive personal data
+
+### 5.5.3 Data Access
+
+| Data | Student | Organizer | Admin |
+|------|---------|-----------|-------|
+| Own profile | Read/Write | Read/Write | Read/Write |
+| Other profiles | Read (name, email) | Read | Read |
+| Own registrations | Read/Write | - | Read |
+| Event registrations | Own only | Own events | All |
+| Events | Read | Read/Write (own) | Read/Write |
+| Attendance | Own | Own events | All |
+| Feedback | Own | Own events | All |
+
+### 5.5.4 Data Retention
+
+| Data | Retention |
+|------|-----------|
+| User accounts | Until deletion requested |
+| Events | 5 years |
+| Registrations | 3 years |
+| Attendance | 3 years |
+| Feedback | 2 years |
+| Certificates | Permanent |
+
+### 5.5.5 Data Deletion
+
+User-Initiated:
+1. User requests deletion
+2. Account marked for deletion
+3. 30-day grace period
+4. Data permanently deleted
+5. Certificates anonymized
+
+Admin-Initiated:
+1. Admin disables account
+2. Reason logged
+3. Data retained for records
+
+## 5.6 Client Security
+
+### 5.6.1 Input Validation
+
+Client-side (Flutter):
+- Email format validation
+- Password strength
+- Required field checks
+- Length limits
+- Pattern matching
+
+Server-side (Firestore Rules):
+- Type checking
+- Range validation
+- Reference validation
+- Custom business rules
+
+### 5.6.2 Form Validation
+
+Login Form:
+- Email: Valid email format
+- Password: Min 6 characters
+
+Signup Form:
+- Name: 2-50 characters, letters only
+- Email: Valid format, unique
+- Password: Min 6 characters
+- Student ID: Matches pattern
+- Department: Required
+
+Event Form:
+- Title: 5-100 characters
+- Description: 20-2000 characters
+- Date: Must be future
+- Capacity: 1-10000
+- Deadline: Before event date
+
+### 5.6.3 QR Code Security
+
+QR Format: CC-<12 random characters>
+Example: CC-aBcD1234EfGh
+
+Security Measures:
+- QR is unique per registration
+- QR is tied to specific event + student
+- QR cannot be forged (server validation)
+- QR can only be scanned once
+- Server validates event ID + student ID
+
+## 5.7 Network Security
+
+### 5.7.1 HTTPS Enforcement
+
+All API calls use HTTPS:
+- Firebase Auth: HTTPS
+- Firestore: HTTPS
+- Storage: HTTPS
+- FCM: HTTPS
+
+No plain HTTP allowed.
+
+### 5.7.2 API Key Protection
+
+Firebase API Keys:
+- Public by design (client-side)
+- Secured via Firebase Rules
+- Restricted to specific domains
+
+### 5.7.3 Rate Limiting
+
+Firestore Rules Limits:
+- 20,000 writes/day (Spark Plan)
+- 50,000 reads/day
+- 20,000 deletes/day
+
+Application-level:
+- Login attempts: 5 per minute
+- Registrations: 10 per minute per user
+- Feedback: 5 per day per event
+
+## 5.8 Audit Logging
+
+### 5.8.1 Events Logged
+
+Logged Events:
+- User signup
+- User login (successful)
+- Failed login attempts
+- Password reset
+- Account disabled
+- Event created
+- Event approved/rejected
+- User role changed
+- Data deletion
+
+### 5.8.2 Log Storage
+
+Location: Firebase Cloud Logging
+Retention: 90 days
+Access: Admin only
+
+## 5.9 Error Handling
+
+### 5.9.1 Client Error Messages
+
+User-Friendly Messages:
+- "Invalid email or password"
+- "Please check your connection"
+- "Something went wrong. Try again"
+- "You don't have permission"
+
+Never expose:
+- Internal errors
+- Stack traces
+- Database details
+- Firebase project info
+
+### 5.9.2 Error Logging
+
+Client Errors:
+- Logged to Firebase Crashlytics
+- Anonymous (no user data)
+
+Server Errors:
+- Logged to Firebase Cloud Logging
+- Reviewed by admin
+
+## 5.10 Security Best Practices
+
+### 5.10.1 Development
+
+- No hardcoded secrets
+- Environment variables for config
+- Firebase config in google-services.json
+- .gitignore for sensitive files
+- No API keys in Git
+
+### 5.10.2 Deployment
+
+- Production Firebase project (separate)
+- Firestore rules deployed
+- Storage rules deployed
+- App signing keys secured
+- Play Store signing configured
+
+### 5.10.3 Ongoing
+
+- Regular security audits
+- Update dependencies
+- Monitor Firebase usage
+- Review Firestore rules
+- Update user permissions
+- Backup data regularly
+
+## 5.11 Compliance
+
+### 5.11.1 Standards
+
+- Firebase Terms of Service
+- Google Cloud Privacy Policy
+- University Data Policy
+- GDPR principles (data minimization)
+
+### 5.11.2 Privacy Policy
+
+Required in app:
+- What data is collected
+- How it's used
+- Who can access
+- How to delete
+- Contact info
+
+Location: In-app + Play Store listing
+
+### 5.11.3 Terms of Service
+
+Required at signup:
+- Acceptable use
+- User responsibilities
+- Content policies
+- Limitation of liability
+
+## 5.12 Security Checklist
+
+Before Deployment:
+- Firebase Rules deployed
+- Storage Rules deployed
+- Email verification enabled (optional)
+- HTTPS enforced
+- Input validation on client
+- Error messages user-friendly
+- No secrets in code
+- Privacy policy ready
+- Terms of service ready
+- Backups configured
+- Logging enabled
+- Rate limits set
+- Tested with different roles
+
+## 5.13 Implementation Order
+
+Day 2:
+1. Set up Firebase Auth
+2. Configure Firestore
+3. Deploy initial Firestore Rules
+
+Day 3:
+4. Implement auth_service.dart
+5. Test role-based access
+
+Day 4:
+6. Refine Firestore Rules
+7. Test student access
+
+Day 5:
+8. Test organizer access
+9. Deploy Storage Rules
+
+Day 6:
+10. Test admin access
+11. Configure audit logging
+
+Day 7:
+12. Security testing
+13. Fix any issues
+
+## 5.14 Emergency Procedures
+
+### 5.14.1 Data Breach
+
+If breach detected:
+1. Immediately disable affected accounts
+2. Review audit logs
+3. Notify affected users
+4. Fix vulnerability
+5. Document incident
+
+### 5.14.2 Abuse Report
+
+If abuse reported:
+1. Verify report
+2. Disable offending account
+3. Review content
+4. Document action
+
+### 5.14.3 System Outage
+
+If system down:
+1. Check Firebase status
+2. Notify users
+3. Restore from backup if needed
+4. Document incident
+
+---
+
+Document Version: 1.0
+Status: Draft

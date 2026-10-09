@@ -1,0 +1,99 @@
+# UC-17: Send Announcement
+
+## Use Case Information
+
+| Field | Value |
+|-------|-------|
+| Use Case ID | UC-17 |
+| Use Case Name | Send Announcement |
+| Actor | Organizer |
+| Priority | Medium |
+| Complexity | Low |
+
+## Description
+
+An organizer sends an announcement to students registered for their event. The announcement triggers a push notification.
+
+## Preconditions
+
+1. Organizer is logged in
+2. At least one event exists
+3. At least one registered student
+
+## Postconditions
+
+1. Announcement saved in Firestore
+2. Push notifications sent
+3. Announcement visible to targeted students
+
+## Main Flow
+
+1. Organizer opens dashboard
+2. Organizer clicks "Send Announcement"
+3. System shows announcement form
+4. Organizer selects target event
+5. Organizer enters title
+6. Organizer enters description
+7. Organizer selects priority (Normal/Important)
+8. Organizer clicks "Send"
+9. System validates fields
+10. System saves announcement
+11. System sends FCM notifications
+12. System shows success message
+
+## Alternative Flows
+
+### A1: Empty Title
+- System shows "Title required"
+- Return to step 5
+
+### A2: No Target Selected
+- System shows "Select target event"
+- Return to step 4
+
+### A3: No Registered Students
+- System shows "No students registered"
+- Use case ends
+
+### A4: Network Error
+- System shows "Check your connection"
+- Return to step 8
+
+## Exceptions
+
+- E1: Firestore write error - retry
+- E2: FCM failure - retry once
+
+## Business Rules
+
+- BR-01: Title max 100 characters
+- BR-02: Description max 500 characters
+- BR-03: Only registered students receive notification
+- BR-04: Important announcements use high-priority FCM
+- BR-05: Rate limit: 5 announcements per hour
+
+## Non-Functional Requirements
+
+- Announcement saved in < 1 second
+- Notifications delivered in < 5 seconds
+- Form validation immediate
+
+## Related Use Cases
+
+- UC-09: View Announcements (Student)
+- UC-16: View Statistics
+
+## UI Reference
+
+Screens: Send Announcement Form
+
+## Use Case Diagram
+
+![UC-17 Send Announcement Diagram](diagrams/UC-17_Send_Announcement.png)
+
+---
+
+Document Version: 1.0
+Last Updated: [Aaj ki date]
+Author: [Aapka naam]
+Status: Draft
