@@ -46,3 +46,14 @@ app.*.map.json
 
 # Widget Preview related
 .widget_preview/
+# Cloudinary Credentials (SECRET)
+docs/Cloudinary_Credentials.txt
+*.env
+.env
+# Firebase Secrets
+android/app/google-services.json
+lib/firebase_options.dart
+firebase.json
+
+# Build folders
+android/build/
