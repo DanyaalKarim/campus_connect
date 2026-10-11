@@ -1,9 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:url_launcher/url_launcher.dart';
+import 'package:intl/intl.dart';
 
 import '../../models/certificate_model.dart';
+import '../../services/certificate_service.dart';
 import '../../theme/app_theme.dart';
 
 class CertificatesScreen extends StatelessWidget {
@@ -179,32 +180,58 @@ class CertificatesScreen extends StatelessWidget {
 
             const SizedBox(height: 16),
 
-            // Action Button
-            SizedBox(
-              width: double.infinity,
-              child: ElevatedButton.icon(
-                onPressed: () => _handleViewCertificate(
-                  context,
-                  certificate.certificateUrl,
-                ),
-                icon: const Icon(Icons.download_outlined, size: 18),
-                label: const Text(
-                  'View / Download',
-                  style: TextStyle(
-                    fontSize: 14,
-                    fontWeight: FontWeight.w600,
+            // Action Buttons
+            Row(
+              children: [
+                // View / Download Button
+                Expanded(
+                  child: ElevatedButton.icon(
+                    onPressed: () => _handleViewCertificate(
+                      context,
+                      certificate,
+                    ),
+                    icon: const Icon(Icons.download_outlined, size: 18),
+                    label: const Text(
+                      'View / Download',
+                      style: TextStyle(
+                        fontSize: 13,
+                        fontWeight: FontWeight.w600,
+                      ),
+                    ),
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: AppColors.primary,
+                      foregroundColor: Colors.white,
+                      minimumSize: const Size(0, 44),
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(10),
+                      ),
+                      elevation: 0,
+                    ),
                   ),
                 ),
-                style: ElevatedButton.styleFrom(
-                  backgroundColor: AppColors.primary,
-                  foregroundColor: Colors.white,
-                  minimumSize: const Size(double.infinity, 44),
-                  shape: RoundedRectangleBorder(
+                const SizedBox(width: 8),
+                // Share Button
+                Container(
+                  width: 44,
+                  height: 44,
+                  decoration: BoxDecoration(
+                    color: AppColors.primary.withValues(alpha: 0.1),
                     borderRadius: BorderRadius.circular(10),
                   ),
-                  elevation: 0,
+                  child: IconButton(
+                    onPressed: () => _handleShareCertificate(
+                      context,
+                      certificate,
+                    ),
+                    icon: Icon(
+                      Icons.share_outlined,
+                      size: 20,
+                      color: AppColors.primary,
+                    ),
+                    tooltip: 'Share',
+                  ),
                 ),
-              ),
+              ],
             ),
           ],
         ),
@@ -246,43 +273,108 @@ class CertificatesScreen extends StatelessWidget {
     );
   }
 
-  // ==================== VIEW CERTIFICATE ====================
+  // ==================== VIEW / DOWNLOAD CERTIFICATE (PDF) ====================
   Future<void> _handleViewCertificate(
       BuildContext context,
-      String url,
+      CertificateModel certificate,
       ) async {
-    if (url.isEmpty) {
+    // Show loading
+    showDialog(
+      context: context,
+      barrierDismissible: false,
+      builder: (context) => const Center(
+        child: CircularProgressIndicator(),
+      ),
+    );
+
+    try {
+      final service = CertificateService();
+
+      // Get student ID from Firebase Auth
+      final user = FirebaseAuth.instance.currentUser;
+      final studentId = user?.uid.substring(0, 8).toUpperCase() ?? 'N/A';
+
+      // Format date
+      final dateFormat = DateFormat('MMMM dd, yyyy');
+      final eventDate = dateFormat.format(certificate.issuedAt);
+
+      // Generate and print/save PDF
+      await service.printCertificate(
+        studentName: certificate.studentName,
+        studentId: studentId,
+        eventTitle: certificate.eventTitle,
+        eventDate: eventDate,
+        organizerName: 'CampusConnect',
+        certificateType: 'PARTICIPATION',
+      );
+
       if (context.mounted) {
+        Navigator.pop(context); // Close loading
         ScaffoldMessenger.of(context).showSnackBar(
           const SnackBar(
-            content: Text('Certificate not available yet'),
+            content: Text('✅ Certificate ready!'),
             behavior: SnackBarBehavior.floating,
+            backgroundColor: AppColors.success,
           ),
         );
       }
-      return;
+    } catch (e) {
+      if (context.mounted) {
+        Navigator.pop(context); // Close loading
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text('❌ Failed to generate certificate: $e'),
+            behavior: SnackBarBehavior.floating,
+            backgroundColor: AppColors.error,
+          ),
+        );
+      }
     }
+  }
+
+  // ==================== SHARE CERTIFICATE ====================
+  Future<void> _handleShareCertificate(
+      BuildContext context,
+      CertificateModel certificate,
+      ) async {
+    // Show loading
+    showDialog(
+      context: context,
+      barrierDismissible: false,
+      builder: (context) => const Center(
+        child: CircularProgressIndicator(),
+      ),
+    );
 
     try {
-      final uri = Uri.parse(url);
-      if (await canLaunchUrl(uri)) {
-        await launchUrl(uri, mode: LaunchMode.externalApplication);
-      } else {
-        if (context.mounted) {
-          ScaffoldMessenger.of(context).showSnackBar(
-            const SnackBar(
-              content: Text('Cannot open certificate'),
-              behavior: SnackBarBehavior.floating,
-            ),
-          );
-        }
+      final service = CertificateService();
+
+      final user = FirebaseAuth.instance.currentUser;
+      final studentId = user?.uid.substring(0, 8).toUpperCase() ?? 'N/A';
+
+      final dateFormat = DateFormat('MMMM dd, yyyy');
+      final eventDate = dateFormat.format(certificate.issuedAt);
+
+      await service.shareCertificate(
+        studentName: certificate.studentName,
+        studentId: studentId,
+        eventTitle: certificate.eventTitle,
+        eventDate: eventDate,
+        organizerName: 'CampusConnect',
+        certificateType: 'PARTICIPATION',
+      );
+
+      if (context.mounted) {
+        Navigator.pop(context);
       }
     } catch (e) {
       if (context.mounted) {
+        Navigator.pop(context);
         ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(
-            content: Text('Failed to open certificate'),
+          SnackBar(
+            content: Text('❌ Failed to share: $e'),
             behavior: SnackBarBehavior.floating,
+            backgroundColor: AppColors.error,
           ),
         );
       }

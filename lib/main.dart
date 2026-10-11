@@ -1,3 +1,4 @@
+import 'services/notification_service.dart';
 import 'providers/announcement_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/gestures.dart';
@@ -16,6 +17,9 @@ void main() async {
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );
+
+  // Initialize notifications
+  await NotificationService().initialize();
 
   runApp(const CampusConnectApp());
 }

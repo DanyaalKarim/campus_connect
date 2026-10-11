@@ -4,6 +4,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 
 import '../../theme/app_theme.dart';
 import 'qr_ticket_screen.dart';
+import '../feedback/feedback_screen.dart';
 
 class MyEventsScreen extends StatefulWidget {
   const MyEventsScreen({super.key});
@@ -147,6 +148,10 @@ class _MyEventsScreenState extends State<MyEventsScreen>
     final status = data['status'] ?? 'registered';
     final qrCode = data['qrCode'] ?? '';
     final eventId = data['eventId'] ?? '';
+    final organizerName = data['organizerName'] ?? 'CampusConnect';
+
+    // Check if feedback already given
+    final hasFeedback = data['hasFeedback'] ?? false;
 
     return Card(
       margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
@@ -155,82 +160,147 @@ class _MyEventsScreenState extends State<MyEventsScreen>
         borderRadius: BorderRadius.circular(16),
       ),
       clipBehavior: Clip.antiAlias,
-      child: InkWell(
-        onTap: () {
-          Navigator.push(
-            context,
-            MaterialPageRoute(
-              builder: (_) => QrTicketScreen(
-                registrationId: registrationId,
-                eventId: eventId,
-                eventTitle: eventTitle,
-                qrCode: qrCode,
-                studentName: data['studentName'] ?? '',
-                studentNumber: data['studentNumber'] ?? '',
-              ),
-            ),
-          );
-        },
-        child: Padding(
-          padding: const EdgeInsets.all(16),
-          child: Row(
-            children: [
-              Container(
-                width: 60,
-                height: 60,
-                decoration: BoxDecoration(
-                  color: AppColors.primary.withValues(alpha: 0.1),
-                  borderRadius: BorderRadius.circular(12),
+      child: Column(
+        children: [
+          InkWell(
+            onTap: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (_) => QrTicketScreen(
+                    registrationId: registrationId,
+                    eventId: eventId,
+                    eventTitle: eventTitle,
+                    qrCode: qrCode,
+                    studentName: data['studentName'] ?? '',
+                    studentNumber: data['studentNumber'] ?? '',
+                  ),
                 ),
-                child: Icon(
-                  isUpcoming
-                      ? Icons.qr_code_2
-                      : Icons.workspace_premium_outlined,
-                  size: 32,
-                  color: AppColors.primary,
-                ),
-              ),
-              const SizedBox(width: 14),
-              Expanded(
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(
-                      eventTitle,
-                      style: const TextStyle(
-                        fontSize: 15,
-                        fontWeight: FontWeight.bold,
-                        color: AppColors.textPrimary,
-                      ),
-                      maxLines: 2,
-                      overflow: TextOverflow.ellipsis,
+              );
+            },
+            child: Padding(
+              padding: const EdgeInsets.all(16),
+              child: Row(
+                children: [
+                  Container(
+                    width: 60,
+                    height: 60,
+                    decoration: BoxDecoration(
+                      color: AppColors.primary.withValues(alpha: 0.1),
+                      borderRadius: BorderRadius.circular(12),
                     ),
-                    const SizedBox(height: 6),
-                    Row(
+                    child: Icon(
+                      isUpcoming
+                          ? Icons.qr_code_2
+                          : Icons.workspace_premium_outlined,
+                      size: 32,
+                      color: AppColors.primary,
+                    ),
+                  ),
+                  const SizedBox(width: 14),
+                  Expanded(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        _buildStatusBadge(status),
-                        const SizedBox(width: 8),
-                        if (isUpcoming)
-                          const Text(
-                            'Tap to view ticket',
-                            style: TextStyle(
-                              fontSize: 11,
-                              color: AppColors.textSecondary,
-                            ),
+                        Text(
+                          eventTitle,
+                          style: const TextStyle(
+                            fontSize: 15,
+                            fontWeight: FontWeight.bold,
+                            color: AppColors.textPrimary,
                           ),
+                          maxLines: 2,
+                          overflow: TextOverflow.ellipsis,
+                        ),
+                        const SizedBox(height: 6),
+                        Row(
+                          children: [
+                            _buildStatusBadge(status),
+                            const SizedBox(width: 8),
+                            if (isUpcoming)
+                              const Text(
+                                'Tap to view ticket',
+                                style: TextStyle(
+                                  fontSize: 11,
+                                  color: AppColors.textSecondary,
+                                ),
+                              ),
+                          ],
+                        ),
                       ],
                     ),
-                  ],
+                  ),
+                  const Icon(
+                    Icons.arrow_forward_ios,
+                    size: 16,
+                    color: AppColors.textSecondary,
+                  ),
+                ],
+              ),
+            ),
+          ),
+
+          // ==================== FEEDBACK BUTTON ====================
+          // Show only for completed + attended events
+          if (!isUpcoming && status == 'attended')
+            Padding(
+              padding: const EdgeInsets.fromLTRB(16, 0, 16, 16),
+              child: SizedBox(
+                width: double.infinity,
+                child: OutlinedButton.icon(
+                  onPressed: () {
+                    if (hasFeedback) {
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        const SnackBar(
+                          content: Text('You have already submitted feedback'),
+                          behavior: SnackBarBehavior.floating,
+                        ),
+                      );
+                      return;
+                    }
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (_) => FeedbackScreen(
+                          eventId: eventId,
+                          eventTitle: eventTitle,
+                          organizerName: organizerName,
+                        ),
+                      ),
+                    );
+                  },
+                  icon: Icon(
+                    hasFeedback
+                        ? Icons.check_circle_outline
+                        : Icons.rate_review_outlined,
+                    size: 18,
+                  ),
+                  label: Text(
+                    hasFeedback ? 'Feedback Submitted' : 'Give Feedback',
+                    style: const TextStyle(
+                      fontSize: 14,
+                      fontWeight: FontWeight.w600,
+                    ),
+                  ),
+                  style: OutlinedButton.styleFrom(
+                    foregroundColor: hasFeedback
+                        ? AppColors.success
+                        : AppColors.primary,
+                    side: BorderSide(
+                      color: hasFeedback
+                          ? AppColors.success
+                          : AppColors.primary,
+                      width: 1.5,
+                    ),
+                    minimumSize: const Size(double.infinity, 44),
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(10),
+                    ),
+                  ),
                 ),
               ),
-              const Icon(
-                Icons.arrow_forward_ios,
-                size: 16,
-                color: AppColors.textSecondary,
-              ),
-            ],
-          ),
-        ),
+            ),
+        ],
       ),
     );
   }

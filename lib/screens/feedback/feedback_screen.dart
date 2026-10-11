@@ -7,11 +7,13 @@ import '../../theme/app_theme.dart';
 class FeedbackScreen extends StatefulWidget {
   final String eventId;
   final String eventTitle;
+  final String organizerName;
 
   const FeedbackScreen({
     super.key,
     required this.eventId,
     required this.eventTitle,
+    this.organizerName = 'CampusConnect',
   });
 
   @override
@@ -105,6 +107,7 @@ class _FeedbackScreenState extends State<FeedbackScreen> {
         await existing.docs.first.reference.update({
           'rating': _rating,
           'comment': _commentController.text.trim(),
+          'organizerName': widget.organizerName,
           'updatedAt': FieldValue.serverTimestamp(),
         });
       } else {
@@ -112,12 +115,26 @@ class _FeedbackScreenState extends State<FeedbackScreen> {
         await FirebaseFirestore.instance.collection('feedback').add({
           'eventId': widget.eventId,
           'eventTitle': widget.eventTitle,
+          'organizerName': widget.organizerName,
           'studentId': userId,
           'studentName': studentName,
           'rating': _rating,
           'comment': _commentController.text.trim(),
           'createdAt': FieldValue.serverTimestamp(),
         });
+
+        // Update registration to mark feedback submitted
+        final regSnapshot = await FirebaseFirestore.instance
+            .collection('registrations')
+            .where('eventId', isEqualTo: widget.eventId)
+            .where('studentId', isEqualTo: userId)
+            .get();
+
+        if (regSnapshot.docs.isNotEmpty) {
+          await regSnapshot.docs.first.reference.update({
+            'hasFeedback': true,
+          });
+        }
       }
 
       if (!mounted) return;
@@ -209,6 +226,14 @@ class _FeedbackScreenState extends State<FeedbackScreen> {
                       fontSize: 16,
                       fontWeight: FontWeight.bold,
                       color: AppColors.textPrimary,
+                    ),
+                  ),
+                  const SizedBox(height: 4),
+                  Text(
+                    'By ${widget.organizerName}',
+                    style: const TextStyle(
+                      fontSize: 12,
+                      color: AppColors.textSecondary,
                     ),
                   ),
                 ],
