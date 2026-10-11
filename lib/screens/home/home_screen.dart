@@ -12,6 +12,7 @@ import '../auth/login_screen.dart';
 import '../events/event_details_screen.dart';
 import '../events/events_screen.dart';
 import '../my_events/my_events_screen.dart';
+import '../profile/profile_screen.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -60,11 +61,7 @@ class _HomeScreenState extends State<HomeScreen> {
       const EventsScreen(),
       const AnnouncementsScreen(),
       const MyEventsScreen(),
-      _PlaceholderTab(
-        icon: Icons.person_outline,
-        title: 'Profile',
-        subtitle: 'Coming Soon',
-      ),
+      const ProfileScreen(),
     ];
 
     return Scaffold(
@@ -144,7 +141,6 @@ class _HomeTab extends StatelessWidget {
       body: CustomScrollView(
         physics: const AlwaysScrollableScrollPhysics(),
         slivers: [
-          // ==================== APP BAR ====================
           SliverAppBar(
             floating: true,
             backgroundColor: AppColors.primary,
@@ -181,24 +177,18 @@ class _HomeTab extends StatelessWidget {
               ),
             ],
           ),
-
-          // ==================== WELCOME CARD ====================
           SliverToBoxAdapter(
             child: Padding(
               padding: const EdgeInsets.fromLTRB(16, 16, 16, 8),
               child: _buildWelcomeCard(),
             ),
           ),
-
-          // ==================== UPCOMING EVENTS HEADER ====================
           SliverToBoxAdapter(
             child: _buildSectionHeader(
               title: 'Upcoming Events',
               onViewAll: onViewAllEvents,
             ),
           ),
-
-          // ==================== UPCOMING EVENTS LIST ====================
           if (eventProvider.isLoading && eventProvider.events.isEmpty)
             const SliverToBoxAdapter(
               child: Padding(
@@ -235,16 +225,12 @@ class _HomeTab extends StatelessWidget {
                 childCount: upcomingEvents.length,
               ),
             ),
-
-          // ==================== ANNOUNCEMENTS HEADER ====================
           SliverToBoxAdapter(
             child: _buildSectionHeader(
               title: 'Latest Announcements',
               onViewAll: onViewAllAnnouncements,
             ),
           ),
-
-          // ==================== ANNOUNCEMENTS LIST ====================
           if (announcementProvider.isLoading &&
               announcementProvider.announcements.isEmpty)
             const SliverToBoxAdapter(
@@ -271,7 +257,6 @@ class _HomeTab extends StatelessWidget {
                 childCount: recentAnnouncements.length,
               ),
             ),
-
           const SliverToBoxAdapter(
             child: SizedBox(height: 24),
           ),
@@ -280,7 +265,6 @@ class _HomeTab extends StatelessWidget {
     );
   }
 
-  // ==================== WELCOME CARD ====================
   Widget _buildWelcomeCard() {
     return Container(
       padding: const EdgeInsets.all(18),
@@ -346,7 +330,6 @@ class _HomeTab extends StatelessWidget {
     );
   }
 
-  // ==================== SECTION HEADER ====================
   Widget _buildSectionHeader({
     required String title,
     required VoidCallback onViewAll,
@@ -385,7 +368,6 @@ class _HomeTab extends StatelessWidget {
     );
   }
 
-  // ==================== ANNOUNCEMENT MINI CARD ====================
   Widget _buildAnnouncementMiniCard(AnnouncementModel announcement) {
     final color = _getCategoryColor(announcement.category);
     final icon = _getCategoryIcon(announcement.category);
@@ -490,7 +472,6 @@ class _HomeTab extends StatelessWidget {
     );
   }
 
-  // ==================== EMPTY CARD ====================
   Widget _buildEmptyCard({
     required IconData icon,
     required String title,
@@ -533,7 +514,6 @@ class _HomeTab extends StatelessWidget {
     );
   }
 
-  // ==================== CATEGORY ICON ====================
   IconData _getCategoryIcon(String category) {
     switch (category) {
       case 'University':
@@ -553,7 +533,6 @@ class _HomeTab extends StatelessWidget {
     }
   }
 
-  // ==================== CATEGORY COLOR ====================
   Color _getCategoryColor(String category) {
     switch (category) {
       case 'University':
@@ -571,58 +550,5 @@ class _HomeTab extends StatelessWidget {
       default:
         return const Color(0xFF607D8B);
     }
-  }
-}
-
-// ==================== PLACEHOLDER TAB ====================
-class _PlaceholderTab extends StatelessWidget {
-  final IconData icon;
-  final String title;
-  final String subtitle;
-
-  const _PlaceholderTab({
-    required this.icon,
-    required this.title,
-    required this.subtitle,
-  });
-
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: AppColors.background,
-      appBar: AppBar(
-        title: Text(title),
-        centerTitle: false,
-      ),
-      body: Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Icon(
-              icon,
-              size: 80,
-              color: AppColors.textSecondary.withValues(alpha: 0.4),
-            ),
-            const SizedBox(height: 16),
-            Text(
-              title,
-              style: const TextStyle(
-                fontSize: 22,
-                fontWeight: FontWeight.bold,
-                color: AppColors.textPrimary,
-              ),
-            ),
-            const SizedBox(height: 8),
-            Text(
-              subtitle,
-              style: const TextStyle(
-                fontSize: 14,
-                color: AppColors.textSecondary,
-              ),
-            ),
-          ],
-        ),
-      ),
-    );
   }
 }
