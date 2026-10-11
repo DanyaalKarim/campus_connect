@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
-import '../../models/event_model.dart';
 import '../../providers/event_provider.dart';
 import '../../theme/app_theme.dart';
 import '../../widgets/event_card.dart';
@@ -22,7 +21,6 @@ class _EventsScreenState extends State<EventsScreen> {
   void initState() {
     super.initState();
 
-    // Load events on screen open
     WidgetsBinding.instance.addPostFrameCallback((_) {
       context.read<EventProvider>().loadEvents();
     });
@@ -48,13 +46,8 @@ class _EventsScreenState extends State<EventsScreen> {
       ),
       body: Column(
         children: [
-          // ==================== SEARCH BAR ====================
           _buildSearchBar(eventProvider),
-
-          // ==================== CATEGORY CHIPS ====================
           _buildCategoryChips(eventProvider),
-
-          // ==================== EVENTS LIST ====================
           Expanded(
             child: _buildEventsList(eventProvider),
           ),
@@ -164,24 +157,18 @@ class _EventsScreenState extends State<EventsScreen> {
 
   // ==================== EVENTS LIST ====================
   Widget _buildEventsList(EventProvider provider) {
-    // Loading state
     if (provider.isLoading && provider.events.isEmpty) {
-      return const Center(
-        child: CircularProgressIndicator(),
-      );
+      return const Center(child: CircularProgressIndicator());
     }
 
-    // Error state
     if (provider.errorMessage != null && provider.events.isEmpty) {
       return _buildErrorState(provider);
     }
 
-    // Empty state
     if (provider.filteredEvents.isEmpty) {
       return _buildEmptyState(provider);
     }
 
-    // Events list
     return RefreshIndicator(
       onRefresh: () async {
         await provider.refreshEvents();
