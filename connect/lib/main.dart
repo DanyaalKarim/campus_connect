@@ -4,16 +4,37 @@ void main() {
   runApp(const ConnectApp());
 }
 
-/// Pre-cached ThemeData objects to prevent expensive Theme re-allocations
+/// Professional Theme Configurations
 final ThemeData _lightTheme = ThemeData(
   brightness: Brightness.light,
   scaffoldBackgroundColor: const Color(0xFFF7F5F0),
   cardColor: Colors.white,
+  dividerColor: const Color(0xFFE7E5E0),
   colorScheme: const ColorScheme.light(
     primary: Color(0xFF2563EB),
     secondary: Color(0xFF7C3AED),
     surface: Colors.white,
     onSurface: Color(0xFF1C1917),
+  ),
+  cardTheme: CardTheme(
+    color: Colors.white,
+    elevation: 0,
+    shape: RoundedRectangleBorder(
+      borderRadius: BorderRadius.circular(12),
+      side: const BorderSide(color: Color(0xFFE7E5E0)),
+    ),
+  ),
+  chipTheme: ChipThemeData(
+    backgroundColor: const Color(0xFFF0EDE8),
+    disabledColor: const Color(0xFFE7E5E0),
+    selectedColor: const Color(0xFF2563EB),
+    secondarySelectedColor: const Color(0xFF2563EB),
+    padding: EdgeInsets.zero,
+    labelStyle: const TextStyle(fontSize: 11, color: Color(0xFF57534E)),
+    secondaryLabelStyle: const TextStyle(fontSize: 11, color: Colors.white),
+    brightness: Brightness.light,
+    side: const BorderSide(color: Color(0xFFE7E5E0)),
+    shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(100)),
   ),
 );
 
@@ -21,11 +42,32 @@ final ThemeData _darkTheme = ThemeData(
   brightness: Brightness.dark,
   scaffoldBackgroundColor: const Color(0xFF0C0A09),
   cardColor: const Color(0xFF1C1917),
+  dividerColor: const Color(0xFF292524),
   colorScheme: const ColorScheme.dark(
     primary: Color(0xFF3B82F6),
     secondary: Color(0xFFA78BFA),
     surface: Color(0xFF1C1917),
     onSurface: Color(0xFFFAFAF9),
+  ),
+  cardTheme: CardTheme(
+    color: const Color(0xFF1C1917),
+    elevation: 0,
+    shape: RoundedRectangleBorder(
+      borderRadius: BorderRadius.circular(12),
+      side: const BorderSide(color: Color(0xFF292524)),
+    ),
+  ),
+  chipTheme: ChipThemeData(
+    backgroundColor: const Color(0xFF292524),
+    disabledColor: const Color(0xFF1C1917),
+    selectedColor: const Color(0xFF3B82F6),
+    secondarySelectedColor: const Color(0xFF3B82F6),
+    padding: EdgeInsets.zero,
+    labelStyle: const TextStyle(fontSize: 11, color: Color(0xFFA8A29E)),
+    secondaryLabelStyle: const TextStyle(fontSize: 11, color: Colors.white),
+    brightness: Brightness.dark,
+    side: const BorderSide(color: Color(0xFF292524)),
+    shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(100)),
   ),
 );
 
@@ -459,17 +501,17 @@ class _IndexDashboardScreenState extends State<IndexDashboardScreen> {
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 10),
       decoration: BoxDecoration(
-        color: isDark ? const Color(0xFF1E3A5F) : const Color(0xFFEFF6FF),
+        color: isDark ? const Color(0xFF1C1917) : const Color(0xFFEFF6FF),
         borderRadius: BorderRadius.circular(10),
         border: Border.all(
-          color: const Color(0xFF2563EB).withOpacity(0.3),
+          color: isDark ? const Color(0xFF292524) : const Color(0xFF2563EB).withOpacity(0.2),
         ),
       ),
       child: Row(
         children: [
           CircleAvatar(
             radius: 16,
-            backgroundColor: const Color(0xFF2563EB),
+            backgroundColor: isDark ? const Color(0xFF3B82F6) : const Color(0xFF2563EB),
             child: Text(
               currentUser.substring(0, 1),
               style: const TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
@@ -517,7 +559,7 @@ class _IndexDashboardScreenState extends State<IndexDashboardScreen> {
               color: Theme.of(context).cardColor,
               borderRadius: BorderRadius.circular(12),
               border: Border.all(
-                color: isActive ? color : Colors.grey.withOpacity(0.2),
+                color: isActive ? color : (isDark ? const Color(0xFF292524) : const Color(0xFFE7E5E0)),
                 width: isActive ? 2 : 1,
               ),
               boxShadow: isActive
@@ -542,7 +584,7 @@ class _IndexDashboardScreenState extends State<IndexDashboardScreen> {
                 Text(
                   cat["desc"] as String,
                   textAlign: TextAlign.center,
-                  style: const TextStyle(fontSize: 10, color: Colors.grey),
+                  style: TextStyle(fontSize: 10, color: isDark ? const Color(0xFFA8A29E) : Colors.grey),
                   maxLines: 2,
                   overflow: TextOverflow.ellipsis,
                 ),
@@ -581,9 +623,13 @@ class _IndexDashboardScreenState extends State<IndexDashboardScreen> {
             filled: true,
             fillColor: bgCard,
             contentPadding: const EdgeInsets.all(12),
-            border: OutlineInputBorder(
+            enabledBorder: OutlineInputBorder(
               borderRadius: BorderRadius.circular(10),
-              borderSide: BorderSide(color: Colors.grey.withOpacity(0.3)),
+              borderSide: BorderSide(color: isDark ? const Color(0xFF292524) : const Color(0xFFD6D3CE)),
+            ),
+            focusedBorder: OutlineInputBorder(
+              borderRadius: BorderRadius.circular(10),
+              borderSide: BorderSide(color: isDark ? const Color(0xFF3B82F6) : const Color(0xFF2563EB), width: 1.5),
             ),
           ),
         ),
@@ -600,7 +646,13 @@ class _IndexDashboardScreenState extends State<IndexDashboardScreen> {
                 child: ChoiceChip(
                   label: Text(dept, style: TextStyle(fontSize: 11, color: isSelected ? Colors.white : textColor)),
                   selected: isSelected,
-                  selectedColor: const Color(0xFF2563EB),
+                  selectedColor: isDark ? const Color(0xFF3B82F6) : const Color(0xFF2563EB),
+                  backgroundColor: isDark ? const Color(0xFF1C1917) : const Color(0xFFFFFFFF),
+                  side: BorderSide(
+                    color: isSelected
+                        ? (isDark ? const Color(0xFF3B82F6) : const Color(0xFF2563EB))
+                        : (isDark ? const Color(0xFF292524) : const Color(0xFFE7E5E0)),
+                  ),
                   onSelected: (selected) {
                     if (selected) setState(() => _selectedDepartment = dept);
                   },
@@ -633,8 +685,11 @@ class _IndexDashboardScreenState extends State<IndexDashboardScreen> {
 
     return Card(
       margin: const EdgeInsets.only(bottom: 14),
-      elevation: 2,
-      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+      elevation: 0,
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(12),
+        side: BorderSide(color: isDark ? const Color(0xFF292524) : const Color(0xFFE7E5E0)),
+      ),
       child: Padding(
         padding: const EdgeInsets.all(16.0),
         child: Column(
@@ -656,7 +711,7 @@ class _IndexDashboardScreenState extends State<IndexDashboardScreen> {
                       const SizedBox(height: 2),
                       Text(
                         "Subject: ${group.subject} • Created by ${group.createdBy}",
-                        style: const TextStyle(fontSize: 12, color: Colors.grey),
+                        style: TextStyle(fontSize: 12, color: isDark ? const Color(0xFFA8A29E) : Colors.grey),
                       ),
                     ],
                   ),
@@ -664,13 +719,16 @@ class _IndexDashboardScreenState extends State<IndexDashboardScreen> {
                 Container(
                   padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
                   decoration: BoxDecoration(
-                    color: const Color(0xFF2563EB).withOpacity(0.12),
+                    color: isDark ? const Color(0xFF1E3A5F) : const Color(0xFF2563EB).withOpacity(0.12),
                     borderRadius: BorderRadius.circular(20),
+                    border: Border.all(
+                      color: isDark ? const Color(0xFF3B82F6).withOpacity(0.3) : Colors.transparent,
+                    ),
                   ),
                   child: Text(
                     group.department,
-                    style: const TextStyle(
-                      color: Color(0xFF2563EB),
+                    style: TextStyle(
+                      color: isDark ? const Color(0xFF93C5FD) : const Color(0xFF2563EB),
                       fontWeight: FontWeight.bold,
                       fontSize: 11,
                     ),
@@ -689,10 +747,10 @@ class _IndexDashboardScreenState extends State<IndexDashboardScreen> {
               spacing: 16,
               runSpacing: 6,
               children: [
-                _metaIconText(Icons.people, "${group.members.length}/${group.maxMembers} Members"),
-                _metaIconText(Icons.location_on_outlined, group.location),
-                if (group.sessionDate.isNotEmpty) _metaIconText(Icons.event, "Session: ${group.sessionDate}"),
-                if (group.whatsAppNumber.isNotEmpty) _metaIconText(Icons.phone, group.whatsAppNumber),
+                _metaIconText(Icons.people, "${group.members.length}/${group.maxMembers} Members", isDark),
+                _metaIconText(Icons.location_on_outlined, group.location, isDark),
+                if (group.sessionDate.isNotEmpty) _metaIconText(Icons.event, "Session: ${group.sessionDate}", isDark),
+                if (group.whatsAppNumber.isNotEmpty) _metaIconText(Icons.phone, group.whatsAppNumber, isDark),
               ],
             ),
             const SizedBox(height: 12),
@@ -705,19 +763,28 @@ class _IndexDashboardScreenState extends State<IndexDashboardScreen> {
                 return Chip(
                   padding: EdgeInsets.zero,
                   labelPadding: const EdgeInsets.symmetric(horizontal: 8),
-                  backgroundColor: isYou ? const Color(0xFF2563EB).withOpacity(0.15) : Colors.grey.withOpacity(0.15),
+                  backgroundColor: isYou
+                      ? (isDark ? const Color(0xFF1E3A5F) : const Color(0xFF2563EB).withOpacity(0.15))
+                      : (isDark ? const Color(0xFF292524) : const Color(0xFFF0EDE8)),
+                  side: BorderSide(
+                    color: isYou
+                        ? (isDark ? const Color(0xFF3B82F6).withOpacity(0.4) : const Color(0xFF2563EB).withOpacity(0.3))
+                        : (isDark ? const Color(0xFF292524) : const Color(0xFFE7E5E0)),
+                  ),
                   label: Text(
                     isYou ? "$m (You)" : m,
                     style: TextStyle(
                       fontSize: 10,
                       fontWeight: isYou ? FontWeight.bold : FontWeight.normal,
-                      color: isYou ? const Color(0xFF2563EB) : textColor,
+                      color: isYou
+                          ? (isDark ? const Color(0xFF93C5FD) : const Color(0xFF1D4ED8))
+                          : textColor,
                     ),
                   ),
                 );
               }).toList(),
             ),
-            const Divider(height: 20),
+            Divider(height: 20, color: isDark ? const Color(0xFF292524) : const Color(0xFFE7E5E0)),
 
             // Action buttons
             Row(
@@ -726,7 +793,7 @@ class _IndexDashboardScreenState extends State<IndexDashboardScreen> {
                   icon: Icon(isMember ? Icons.exit_to_app : Icons.add_circle_outline, size: 16),
                   label: Text(isMember ? "Leave" : (isFull ? "Full" : "Join")),
                   style: ElevatedButton.styleFrom(
-                    backgroundColor: isMember ? Colors.orange : const Color(0xFF2563EB),
+                    backgroundColor: isMember ? Colors.orange : (isDark ? const Color(0xFF3B82F6) : const Color(0xFF2563EB)),
                     foregroundColor: Colors.white,
                   ),
                   onPressed: isFull && !isMember ? null : () => _toggleJoinGroup(group),
@@ -736,6 +803,10 @@ class _IndexDashboardScreenState extends State<IndexDashboardScreen> {
                   OutlinedButton.icon(
                     icon: const Icon(Icons.chat_bubble_outline, size: 16),
                     label: const Text("Chat"),
+                    style: OutlinedButton.styleFrom(
+                      side: BorderSide(color: isDark ? const Color(0xFF292524) : const Color(0xFFD6D3CE)),
+                      foregroundColor: textColor,
+                    ),
                     onPressed: () => _showToast("Opening group chat for ${group.name}"),
                   ),
                 const Spacer(),
@@ -753,13 +824,13 @@ class _IndexDashboardScreenState extends State<IndexDashboardScreen> {
     );
   }
 
-  Widget _metaIconText(IconData icon, String text) {
+  Widget _metaIconText(IconData icon, String text, bool isDark) {
     return Row(
       mainAxisSize: MainAxisSize.min,
       children: [
-        Icon(icon, size: 14, color: Colors.grey),
+        Icon(icon, size: 14, color: isDark ? const Color(0xFFA8A29E) : Colors.grey),
         const SizedBox(width: 4),
-        Text(text, style: const TextStyle(fontSize: 11, color: Colors.grey)),
+        Text(text, style: TextStyle(fontSize: 11, color: isDark ? const Color(0xFFA8A29E) : Colors.grey)),
       ],
     );
   }
@@ -770,8 +841,11 @@ class _IndexDashboardScreenState extends State<IndexDashboardScreen> {
 
   Widget _buildCreateTab(bool isDark, Color bgCard, Color textColor) {
     return Card(
-      elevation: 2,
-      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+      elevation: 0,
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(12),
+        side: BorderSide(color: isDark ? const Color(0xFF292524) : const Color(0xFFE7E5E0)),
+      ),
       child: Padding(
         padding: const EdgeInsets.all(20.0),
         child: Column(
@@ -795,6 +869,7 @@ class _IndexDashboardScreenState extends State<IndexDashboardScreen> {
             DropdownButtonFormField<String>(
               value: _formDept,
               decoration: const InputDecoration(labelText: "Department"),
+              dropdownColor: isDark ? const Color(0xFF1C1917) : Colors.white,
               items: _departments.where((d) => d != "All").map((d) {
                 return DropdownMenuItem(value: d, child: Text(d));
               }).toList(),
@@ -827,7 +902,7 @@ class _IndexDashboardScreenState extends State<IndexDashboardScreen> {
               children: [
                 ElevatedButton(
                   style: ElevatedButton.styleFrom(
-                    backgroundColor: const Color(0xFF2563EB),
+                    backgroundColor: isDark ? const Color(0xFF3B82F6) : const Color(0xFF2563EB),
                     foregroundColor: Colors.white,
                     padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 12),
                   ),
@@ -837,6 +912,9 @@ class _IndexDashboardScreenState extends State<IndexDashboardScreen> {
                 const SizedBox(width: 12),
                 TextButton(
                   onPressed: _clearForm,
+                  style: TextButton.styleFrom(
+                    foregroundColor: isDark ? const Color(0xFFA8A29E) : Colors.grey[700],
+                  ),
                   child: const Text("Clear Form"),
                 ),
               ],
@@ -886,16 +964,20 @@ class _IndexDashboardScreenState extends State<IndexDashboardScreen> {
       children: [
         Row(
           children: [
-            Expanded(child: _statCard("Total Groups", "$totalGroups", Colors.blue)),
+            Expanded(child: _statCard("Total Groups", "$totalGroups", isDark ? const Color(0xFF93C5FD) : Colors.blue, isDark)),
             const SizedBox(width: 10),
-            Expanded(child: _statCard("Total Members", "$totalMembers", Colors.purple)),
+            Expanded(child: _statCard("Total Members", "$totalMembers", isDark ? const Color(0xFFA78BFA) : Colors.purple, isDark)),
             const SizedBox(width: 10),
-            Expanded(child: _statCard("Open Spots", "$openSpots", Colors.green)),
+            Expanded(child: _statCard("Open Spots", "$openSpots", isDark ? const Color(0xFF86EFAC) : Colors.green, isDark)),
           ],
         ),
         const SizedBox(height: 20),
         Card(
-          elevation: 2,
+          elevation: 0,
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(12),
+            side: BorderSide(color: isDark ? const Color(0xFF292524) : const Color(0xFFE7E5E0)),
+          ),
           child: Padding(
             padding: const EdgeInsets.all(16.0),
             child: Column(
@@ -913,8 +995,8 @@ class _IndexDashboardScreenState extends State<IndexDashboardScreen> {
                         Expanded(
                           child: LinearProgressIndicator(
                             value: totalGroups > 0 ? count / totalGroups : 0,
-                            backgroundColor: Colors.grey.withOpacity(0.2),
-                            color: const Color(0xFF2563EB),
+                            backgroundColor: isDark ? const Color(0xFF292524) : Colors.grey.withOpacity(0.2),
+                            color: isDark ? const Color(0xFF3B82F6) : const Color(0xFF2563EB),
                           ),
                         ),
                         const SizedBox(width: 12),
@@ -931,16 +1013,20 @@ class _IndexDashboardScreenState extends State<IndexDashboardScreen> {
     );
   }
 
-  Widget _statCard(String label, String value, Color color) {
+  Widget _statCard(String label, String value, Color color, bool isDark) {
     return Card(
-      elevation: 2,
+      elevation: 0,
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(12),
+        side: BorderSide(color: isDark ? const Color(0xFF292524) : const Color(0xFFE7E5E0)),
+      ),
       child: Padding(
         padding: const EdgeInsets.all(16.0),
         child: Column(
           children: [
             Text(value, style: TextStyle(fontSize: 28, fontWeight: FontWeight.bold, color: color)),
             const SizedBox(height: 4),
-            Text(label, style: const TextStyle(fontSize: 11, color: Colors.grey)),
+            Text(label, style: TextStyle(fontSize: 11, color: isDark ? const Color(0xFFA8A29E) : Colors.grey)),
           ],
         ),
       ),
@@ -963,10 +1049,15 @@ class _IndexDashboardScreenState extends State<IndexDashboardScreen> {
       itemBuilder: (context, index) {
         final req = _joinRequests[index];
         return Card(
+          elevation: 0,
           margin: const EdgeInsets.only(bottom: 10),
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(12),
+            side: BorderSide(color: isDark ? const Color(0xFF292524) : const Color(0xFFE7E5E0)),
+          ),
           child: ListTile(
             title: Text("${req.userName} requested to join ${req.groupName}"),
-            subtitle: Text("Email: ${req.userEmail}"),
+            subtitle: Text("Email: ${req.userEmail}", style: TextStyle(color: isDark ? const Color(0xFFA8A29E) : Colors.grey[700])),
             trailing: Row(
               mainAxisSize: MainAxisSize.min,
               children: [
