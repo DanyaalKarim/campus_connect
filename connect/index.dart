@@ -16,7 +16,7 @@ final ThemeData _lightTheme = ThemeData(
     surface: Colors.white,
     onSurface: Color(0xFF1C1917),
   ),
-  cardTheme: CardTheme(
+  cardTheme: CardThemeData(
     color: Colors.white,
     elevation: 0,
     shape: RoundedRectangleBorder(
@@ -49,7 +49,7 @@ final ThemeData _darkTheme = ThemeData(
     surface: Color(0xFF1C1917),
     onSurface: Color(0xFFFAFAF9),
   ),
-  cardTheme: CardTheme(
+  cardTheme: CardThemeData(
     color: const Color(0xFF1C1917),
     elevation: 0,
     shape: RoundedRectangleBorder(
