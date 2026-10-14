@@ -30,7 +30,6 @@ class FirestoreService {
       ))
           .toList();
 
-      // Sort by date (earliest first)
       events.sort((a, b) => a.date.compareTo(b.date));
       return events;
     });
@@ -130,7 +129,6 @@ class FirestoreService {
       ))
           .toList();
 
-      // Sort by registration count (most popular first)
       events.sort(
               (a, b) => b.registeredCount.compareTo(a.registeredCount));
       return events.take(limit).toList();
@@ -254,6 +252,7 @@ class FirestoreService {
         'studentNumber': studentNumber,
         'status': 'registered',
         'qrCode': qrCode,
+        'hasFeedback': false,
         'registeredAt': FieldValue.serverTimestamp(),
       });
 
@@ -294,7 +293,7 @@ class FirestoreService {
     }
   }
 
-  /// Cancel registration
+  /// Cancel registration (by registration ID)
   Future<String?> cancelRegistration(String registrationId) async {
     try {
       DocumentSnapshot regDoc = await _firestore
@@ -320,6 +319,37 @@ class FirestoreService {
       return null;
     } catch (e) {
       return e.toString();
+    }
+  }
+
+  // ==================== CANCEL REGISTRATION BY EVENT + STUDENT ====================
+  Future<String?> cancelRegistrationByEventAndStudent({
+    required String eventId,
+    required String studentId,
+  }) async {
+    try {
+      // Find registration
+      final snapshot = await _firestore
+          .collection(registrationsCollection)
+          .where('eventId', isEqualTo: eventId)
+          .where('studentId', isEqualTo: studentId)
+          .get();
+
+      if (snapshot.docs.isEmpty) {
+        return 'Registration not found';
+      }
+
+      // Delete registration
+      await snapshot.docs.first.reference.delete();
+
+      // Decrement event's registeredCount
+      await _firestore.collection(eventsCollection).doc(eventId).update({
+        'registeredCount': FieldValue.increment(-1),
+      });
+
+      return null;
+    } catch (e) {
+      return 'Failed to cancel: $e';
     }
   }
 }

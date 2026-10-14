@@ -3,6 +3,7 @@ import 'providers/announcement_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/gestures.dart';
 import 'package:firebase_core/firebase_core.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';    // ✅ YE IMPORT ADD KARO
 import 'package:provider/provider.dart';
 
 import 'firebase_options.dart';
@@ -16,6 +17,12 @@ void main() async {
 
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
+  );
+
+  // ✅ FIRESTORE OFFLINE PERSISTENCE — YE 4 LINES ADD KARO
+  FirebaseFirestore.instance.settings = const Settings(
+    persistenceEnabled: true,
+    cacheSizeBytes: Settings.CACHE_SIZE_UNLIMITED,
   );
 
   // Initialize notifications

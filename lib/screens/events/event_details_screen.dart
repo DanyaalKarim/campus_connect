@@ -78,6 +78,148 @@ class _EventDetailsScreenState extends State<EventDetailsScreen> {
     }
   }
 
+  // ==================== SHOW CONFIRMATION DIALOG ====================
+  Future<void> _showRegistrationConfirmation() async {
+    if (_event == null) return;
+
+    final confirmed = await showDialog<bool>(
+      context: context,
+      barrierDismissible: false,
+      builder: (dialogContext) {
+        return AlertDialog(
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(16),
+          ),
+          title: Row(
+            children: [
+              Container(
+                padding: const EdgeInsets.all(8),
+                decoration: BoxDecoration(
+                  color: AppColors.primary.withValues(alpha: 0.1),
+                  shape: BoxShape.circle,
+                ),
+                child: const Icon(
+                  Icons.how_to_reg_outlined,
+                  color: AppColors.primary,
+                  size: 20,
+                ),
+              ),
+              const SizedBox(width: 12),
+              const Text(
+                'Confirm Registration',
+                style: TextStyle(
+                  fontSize: 18,
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+            ],
+          ),
+          content: Column(
+            mainAxisSize: MainAxisSize.min,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              const Text(
+                'Are you sure you want to register for:',
+                style: TextStyle(
+                  fontSize: 13,
+                  color: AppColors.textSecondary,
+                ),
+              ),
+              const SizedBox(height: 12),
+              Container(
+                padding: const EdgeInsets.all(12),
+                decoration: BoxDecoration(
+                  color: AppColors.background,
+                  borderRadius: BorderRadius.circular(10),
+                ),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      _event!.title,
+                      style: const TextStyle(
+                        fontSize: 14,
+                        fontWeight: FontWeight.bold,
+                        color: AppColors.textPrimary,
+                      ),
+                    ),
+                    const SizedBox(height: 8),
+                    _buildDialogInfoRow(
+                      Icons.calendar_today_outlined,
+                      '${_event!.formattedDate} • ${_event!.time}',
+                    ),
+                    const SizedBox(height: 4),
+                    _buildDialogInfoRow(
+                      Icons.location_on_outlined,
+                      _event!.venue,
+                    ),
+                    if (_event!.organizerName.isNotEmpty) ...[
+                      const SizedBox(height: 4),
+                      _buildDialogInfoRow(
+                        Icons.people_outline,
+                        _event!.organizerName,
+                      ),
+                    ],
+                  ],
+                ),
+              ),
+            ],
+          ),
+          actions: [
+            TextButton(
+              onPressed: () => Navigator.of(dialogContext).pop(false),
+              child: const Text('Cancel'),
+            ),
+            ElevatedButton(
+              onPressed: () => Navigator.of(dialogContext).pop(true),
+              style: ElevatedButton.styleFrom(
+                backgroundColor: AppColors.primary,
+                foregroundColor: Colors.white,
+                padding: const EdgeInsets.symmetric(
+                  horizontal: 20,
+                  vertical: 12,
+                ),
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(10),
+                ),
+              ),
+              child: const Text(
+                'Yes, Register',
+                style: TextStyle(
+                  fontSize: 13,
+                  fontWeight: FontWeight.w600,
+                ),
+              ),
+            ),
+          ],
+        );
+      },
+    );
+
+    if (confirmed == true) {
+      await _registerForEvent();
+    }
+  }
+
+  Widget _buildDialogInfoRow(IconData icon, String text) {
+    return Row(
+      children: [
+        Icon(icon, size: 14, color: AppColors.textSecondary),
+        const SizedBox(width: 8),
+        Expanded(
+          child: Text(
+            text,
+            style: const TextStyle(
+              fontSize: 12,
+              color: AppColors.textSecondary,
+            ),
+          ),
+        ),
+      ],
+    );
+  }
+
+  // ==================== REGISTER ====================
   Future<void> _registerForEvent() async {
     if (_event == null) return;
 
@@ -111,6 +253,180 @@ class _EventDetailsScreenState extends State<EventDetailsScreen> {
     } else {
       setState(() => _isAlreadyRegistered = true);
       _showSuccess('Registered successfully!');
+    }
+  }
+
+  // ==================== CANCEL REGISTRATION ====================
+  Future<void> _showCancelConfirmation() async {
+    if (_event == null) return;
+
+    final confirmed = await showDialog<bool>(
+      context: context,
+      barrierDismissible: false,
+      builder: (dialogContext) {
+        return AlertDialog(
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(16),
+          ),
+          title: Row(
+            children: [
+              Container(
+                padding: const EdgeInsets.all(8),
+                decoration: BoxDecoration(
+                  color: AppColors.error.withValues(alpha: 0.1),
+                  shape: BoxShape.circle,
+                ),
+                child: const Icon(
+                  Icons.cancel_outlined,
+                  color: AppColors.error,
+                  size: 20,
+                ),
+              ),
+              const SizedBox(width: 12),
+              const Text(
+                'Cancel Registration',
+                style: TextStyle(
+                  fontSize: 18,
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+            ],
+          ),
+          content: Column(
+            mainAxisSize: MainAxisSize.min,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              const Text(
+                'Are you sure you want to cancel your registration for:',
+                style: TextStyle(
+                  fontSize: 13,
+                  color: AppColors.textSecondary,
+                ),
+              ),
+              const SizedBox(height: 12),
+              Container(
+                padding: const EdgeInsets.all(12),
+                decoration: BoxDecoration(
+                  color: AppColors.background,
+                  borderRadius: BorderRadius.circular(10),
+                ),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      _event!.title,
+                      style: const TextStyle(
+                        fontSize: 14,
+                        fontWeight: FontWeight.bold,
+                        color: AppColors.textPrimary,
+                      ),
+                    ),
+                    const SizedBox(height: 8),
+                    _buildDialogInfoRow(
+                      Icons.calendar_today_outlined,
+                      '${_event!.formattedDate} • ${_event!.time}',
+                    ),
+                  ],
+                ),
+              ),
+              const SizedBox(height: 12),
+              Container(
+                padding: const EdgeInsets.all(10),
+                decoration: BoxDecoration(
+                  color: AppColors.error.withValues(alpha: 0.08),
+                  borderRadius: BorderRadius.circular(8),
+                  border: Border.all(
+                    color: AppColors.error.withValues(alpha: 0.2),
+                  ),
+                ),
+                child: const Row(
+                  children: [
+                    Icon(
+                      Icons.warning_amber_rounded,
+                      size: 16,
+                      color: AppColors.error,
+                    ),
+                    SizedBox(width: 8),
+                    Expanded(
+                      child: Text(
+                        'This action cannot be undone.',
+                        style: TextStyle(
+                          fontSize: 11,
+                          color: AppColors.error,
+                          fontWeight: FontWeight.w600,
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            ],
+          ),
+          actions: [
+            TextButton(
+              onPressed: () => Navigator.of(dialogContext).pop(false),
+              child: const Text('Keep Registration'),
+            ),
+            ElevatedButton(
+              onPressed: () => Navigator.of(dialogContext).pop(true),
+              style: ElevatedButton.styleFrom(
+                backgroundColor: AppColors.error,
+                foregroundColor: Colors.white,
+                padding: const EdgeInsets.symmetric(
+                  horizontal: 20,
+                  vertical: 12,
+                ),
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(10),
+                ),
+              ),
+              child: const Text(
+                'Yes, Cancel',
+                style: TextStyle(
+                  fontSize: 13,
+                  fontWeight: FontWeight.w600,
+                ),
+              ),
+            ),
+          ],
+        );
+      },
+    );
+
+    if (confirmed == true) {
+      await _cancelRegistration();
+    }
+  }
+
+  Future<void> _cancelRegistration() async {
+    if (_event == null) return;
+
+    final authProvider = context.read<AuthProvider>();
+    final user = authProvider.user;
+
+    if (user == null) {
+      _showError('Please login first');
+      return;
+    }
+
+    setState(() => _isRegistering = true);
+
+    final eventProvider = context.read<EventProvider>();
+
+    final error = await eventProvider.cancelRegistration(
+      eventId: _event!.eventId,
+      studentId: user.uid,
+    );
+
+    if (!mounted) return;
+
+    setState(() => _isRegistering = false);
+
+    if (error != null) {
+      _showError(error);
+    } else {
+      setState(() => _isAlreadyRegistered = false);
+      _showSuccess('Registration cancelled successfully');
     }
   }
 
@@ -172,7 +488,6 @@ class _EventDetailsScreenState extends State<EventDetailsScreen> {
       backgroundColor: AppColors.background,
       body: CustomScrollView(
         slivers: [
-          // ==================== APP BAR WITH POSTER ====================
           SliverAppBar(
             expandedHeight: 220,
             pinned: true,
@@ -182,20 +497,14 @@ class _EventDetailsScreenState extends State<EventDetailsScreen> {
               background: _buildPosterHeader(event),
             ),
           ),
-
-          // ==================== CONTENT ====================
           SliverToBoxAdapter(
             child: Padding(
               padding: const EdgeInsets.all(20),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  // Category Badge
                   _buildCategoryBadge(event.category),
-
                   const SizedBox(height: 12),
-
-                  // Title
                   Text(
                     event.title,
                     style: const TextStyle(
@@ -204,24 +513,18 @@ class _EventDetailsScreenState extends State<EventDetailsScreen> {
                       color: AppColors.textPrimary,
                     ),
                   ),
-
                   const SizedBox(height: 20),
-
-                  // Info Cards
                   _buildInfoCard(
                     icon: Icons.calendar_today_outlined,
                     label: 'Date & Time',
                     value: '${event.formattedDate} • ${event.time}',
                   ),
-
                   const SizedBox(height: 12),
-
                   _buildInfoCard(
                     icon: Icons.location_on_outlined,
                     label: 'Venue',
                     value: event.venue,
                   ),
-
                   if (event.speaker.isNotEmpty) ...[
                     const SizedBox(height: 12),
                     _buildInfoCard(
@@ -230,18 +533,13 @@ class _EventDetailsScreenState extends State<EventDetailsScreen> {
                       value: event.speaker,
                     ),
                   ],
-
                   const SizedBox(height: 12),
-
                   _buildInfoCard(
                     icon: Icons.people_outline,
                     label: 'Organizer',
                     value: event.organizerName,
                   ),
-
                   const SizedBox(height: 24),
-
-                  // Description
                   const Text(
                     'About Event',
                     style: TextStyle(
@@ -259,17 +557,10 @@ class _EventDetailsScreenState extends State<EventDetailsScreen> {
                       color: AppColors.textSecondary,
                     ),
                   ),
-
                   const SizedBox(height: 24),
-
-                  // Registration Stats
                   _buildRegistrationStats(event),
-
                   const SizedBox(height: 24),
-
-                  // Deadline Info
                   _buildDeadlineInfo(event),
-
                   const SizedBox(height: 100),
                 ],
               ),
@@ -277,13 +568,10 @@ class _EventDetailsScreenState extends State<EventDetailsScreen> {
           ),
         ],
       ),
-
-      // ==================== BOTTOM REGISTER BUTTON ====================
       bottomNavigationBar: _buildBottomButton(event),
     );
   }
 
-  // ==================== POSTER HEADER ====================
   Widget _buildPosterHeader(EventModel event) {
     if (event.posterUrl.isEmpty) {
       return Container(
@@ -321,7 +609,6 @@ class _EventDetailsScreenState extends State<EventDetailsScreen> {
     );
   }
 
-  // ==================== CATEGORY BADGE ====================
   Widget _buildCategoryBadge(String category) {
     final color = _getCategoryColor(category);
     return Container(
@@ -341,7 +628,6 @@ class _EventDetailsScreenState extends State<EventDetailsScreen> {
     );
   }
 
-  // ==================== INFO CARD ====================
   Widget _buildInfoCard({
     required IconData icon,
     required String label,
@@ -394,7 +680,6 @@ class _EventDetailsScreenState extends State<EventDetailsScreen> {
     );
   }
 
-  // ==================== REGISTRATION STATS ====================
   Widget _buildRegistrationStats(EventModel event) {
     final progress = event.registrationProgress;
     final percentage = (progress * 100).toStringAsFixed(0);
@@ -504,7 +789,6 @@ class _EventDetailsScreenState extends State<EventDetailsScreen> {
     );
   }
 
-  // ==================== DEADLINE INFO ====================
   Widget _buildDeadlineInfo(EventModel event) {
     final isPassed = event.isDeadlinePassed;
 
@@ -560,31 +844,42 @@ class _EventDetailsScreenState extends State<EventDetailsScreen> {
 
   // ==================== BOTTOM BUTTON ====================
   Widget _buildBottomButton(EventModel event) {
-    // Determine button state
     String buttonText;
     bool isEnabled;
     Color buttonColor;
+    IconData buttonIcon;
+    VoidCallback? onPressed;
 
     if (_isAlreadyRegistered) {
-      buttonText = 'Already Registered';
-      isEnabled = false;
-      buttonColor = AppColors.success;
+      buttonText = 'Cancel Registration';
+      isEnabled = true;
+      buttonColor = AppColors.error;
+      buttonIcon = Icons.cancel_outlined;
+      onPressed = _showCancelConfirmation;
     } else if (event.isPast) {
       buttonText = 'Event Completed';
       isEnabled = false;
       buttonColor = AppColors.textSecondary;
+      buttonIcon = Icons.event_busy_outlined;
+      onPressed = null;
     } else if (event.isFull) {
       buttonText = 'Event Full';
       isEnabled = false;
       buttonColor = AppColors.error;
+      buttonIcon = Icons.block;
+      onPressed = null;
     } else if (event.isDeadlinePassed) {
       buttonText = 'Registration Closed';
       isEnabled = false;
       buttonColor = AppColors.error;
+      buttonIcon = Icons.timer_off_outlined;
+      onPressed = null;
     } else {
       buttonText = 'Register Now';
       isEnabled = true;
       buttonColor = AppColors.primary;
+      buttonIcon = Icons.how_to_reg_outlined;
+      onPressed = _showRegistrationConfirmation;
     }
 
     return Container(
@@ -604,9 +899,7 @@ class _EventDetailsScreenState extends State<EventDetailsScreen> {
         child: SizedBox(
           height: 52,
           child: ElevatedButton(
-            onPressed: (isEnabled && !_isRegistering)
-                ? _registerForEvent
-                : null,
+            onPressed: (isEnabled && !_isRegistering) ? onPressed : null,
             style: ElevatedButton.styleFrom(
               backgroundColor: buttonColor,
               foregroundColor: Colors.white,
@@ -629,12 +922,7 @@ class _EventDetailsScreenState extends State<EventDetailsScreen> {
                 : Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                Icon(
-                  _isAlreadyRegistered
-                      ? Icons.check_circle
-                      : Icons.how_to_reg_outlined,
-                  size: 20,
-                ),
+                Icon(buttonIcon, size: 20),
                 const SizedBox(width: 8),
                 Text(
                   buttonText,
@@ -651,7 +939,6 @@ class _EventDetailsScreenState extends State<EventDetailsScreen> {
     );
   }
 
-  // ==================== CATEGORY ICON ====================
   IconData _getCategoryIcon(String category) {
     switch (category) {
       case 'Seminars':
@@ -675,7 +962,6 @@ class _EventDetailsScreenState extends State<EventDetailsScreen> {
     }
   }
 
-  // ==================== CATEGORY COLOR ====================
   Color _getCategoryColor(String category) {
     switch (category) {
       case 'Seminars':

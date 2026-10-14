@@ -43,7 +43,6 @@ class EventProvider extends ChangeNotifier {
     _clearError();
 
     try {
-      // Listen to real-time updates
       _firestoreService.getApprovedEvents().listen(
             (events) {
           _events = events;
@@ -102,14 +101,12 @@ class EventProvider extends ChangeNotifier {
   void _applyFilters() {
     List<EventModel> result = List.from(_events);
 
-    // Filter by category
     if (_selectedCategory != 'All') {
       result = result
           .where((event) => event.category == _selectedCategory)
           .toList();
     }
 
-    // Filter by search query
     if (_searchQuery.isNotEmpty) {
       final query = _searchQuery.toLowerCase();
       result = result.where((event) {
@@ -119,7 +116,6 @@ class EventProvider extends ChangeNotifier {
       }).toList();
     }
 
-    // Sort by date
     result.sort((a, b) => a.date.compareTo(b.date));
 
     _filteredEvents = result;
@@ -168,7 +164,7 @@ class EventProvider extends ChangeNotifier {
         return error;
       }
 
-      return null; // Success
+      return null;
     } catch (e) {
       _setError('Registration failed: $e');
       _setLoading(false);
@@ -192,13 +188,18 @@ class EventProvider extends ChangeNotifier {
     return _firestoreService.getUserRegistrations(studentId);
   }
 
-  // ==================== CANCEL REGISTRATION ====================
-  Future<String?> cancelRegistration(String registrationId) async {
+  // ==================== CANCEL REGISTRATION (BY EVENT + STUDENT) ====================
+  Future<String?> cancelRegistration({
+    required String eventId,
+    required String studentId,
+  }) async {
     _setLoading(true);
 
     try {
-      final error =
-      await _firestoreService.cancelRegistration(registrationId);
+      final error = await _firestoreService.cancelRegistrationByEventAndStudent(
+        eventId: eventId,
+        studentId: studentId,
+      );
       _setLoading(false);
 
       if (error != null) {
