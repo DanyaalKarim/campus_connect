@@ -5,6 +5,9 @@ import '../../providers/auth_provider.dart';
 import '../../theme/app_theme.dart';
 import '../auth/login_screen.dart';
 import '../certificates/certificates_screen.dart';
+import 'my_feedback_screen.dart';
+import 'settings_screen.dart';
+import 'help_support_screen.dart';
 
 class ProfileScreen extends StatelessWidget {
   const ProfileScreen({super.key});
@@ -78,7 +81,12 @@ class ProfileScreen extends StatelessWidget {
                     title: 'My Feedback',
                     subtitle: 'Events you have reviewed',
                     onTap: () {
-                      _showComingSoon(context);
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (_) => const MyFeedbackScreen(),
+                        ),
+                      );
                     },
                   ),
                   const SizedBox(height: 8),
@@ -88,7 +96,12 @@ class ProfileScreen extends StatelessWidget {
                     title: 'Settings',
                     subtitle: 'App preferences',
                     onTap: () {
-                      _showComingSoon(context);
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (_) => const SettingsScreen(),
+                        ),
+                      );
                     },
                   ),
                   const SizedBox(height: 8),
@@ -98,7 +111,12 @@ class ProfileScreen extends StatelessWidget {
                     title: 'Help & Support',
                     subtitle: 'Get help with the app',
                     onTap: () {
-                      _showComingSoon(context);
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (_) => const HelpSupportScreen(),
+                        ),
+                      );
                     },
                   ),
                   const SizedBox(height: 8),
@@ -419,8 +437,11 @@ class ProfileScreen extends StatelessWidget {
         content: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
-            const Icon(Icons.school_rounded,
-                size: 60, color: AppColors.primary),
+            const Icon(
+              Icons.school_rounded,
+              size: 60,
+              color: AppColors.primary,
+            ),
             const SizedBox(height: 12),
             const Text(
               'CampusConnect',
@@ -454,16 +475,6 @@ class ProfileScreen extends StatelessWidget {
             child: const Text('Close'),
           ),
         ],
-      ),
-    );
-  }
-
-  // ==================== SHOW COMING SOON ====================
-  void _showComingSoon(BuildContext context) {
-    ScaffoldMessenger.of(context).showSnackBar(
-      const SnackBar(
-        content: Text('Coming soon!'),
-        behavior: SnackBarBehavior.floating,
       ),
     );
   }
