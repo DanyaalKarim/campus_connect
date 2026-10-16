@@ -45,31 +45,91 @@ class _SettingsScreenState extends State<SettingsScreen> {
         children: [
           const SizedBox(height: 8),
           _buildSectionHeader('Notifications'),
-          SwitchListTile(
-            title: const Text('Push Notifications'),
-            subtitle: const Text('Receive event and announcement alerts'),
-            value: _notificationsEnabled,
-            activeThumbColor: AppColors.primary,
-            onChanged: _toggleNotifications,
+
+          // Switch ListTile
+          Material(
+            color: Colors.transparent,
+            child: SwitchListTile(
+              title: const Text('Push Notifications'),
+              subtitle: const Text('Receive event and announcement alerts'),
+              value: _notificationsEnabled,
+              activeThumbColor: AppColors.primary,
+              onChanged: _toggleNotifications,
+            ),
           ),
+
           const Divider(),
           _buildSectionHeader('About'),
-          ListTile(
-            leading: const Icon(Icons.info_outline, color: AppColors.primary),
-            title: const Text('App Version'),
-            subtitle: const Text('1.0.0'),
+
+          // App Version
+          _buildListTile(
+            icon: Icons.info_outline,
+            title: 'App Version',
+            subtitle: '1.0.0',
           ),
-          ListTile(
-            leading: const Icon(Icons.school_outlined, color: AppColors.primary),
-            title: const Text('University'),
-            subtitle: const Text('Riphah International University'),
+
+          // University
+          _buildListTile(
+            icon: Icons.school_outlined,
+            title: 'University',
+            subtitle: 'Riphah International University',
           ),
-          ListTile(
-            leading: const Icon(Icons.person_outline, color: AppColors.primary),
-            title: const Text('Developer'),
-            subtitle: const Text('Danyaal Karim (63780)'),
+
+          // Developer
+          _buildListTile(
+            icon: Icons.person_outline,
+            title: 'Developer',
+            subtitle: 'Danyaal Karim (63780)',
           ),
+
+          const SizedBox(height: 16),
         ],
+      ),
+    );
+  }
+
+  // ==================== LIST TILE (FIXED) ====================
+  Widget _buildListTile({
+    required IconData icon,
+    required String title,
+    required String subtitle,
+  }) {
+    return Material(
+      color: Colors.transparent,
+      child: InkWell(
+        onTap: () {},
+        child: Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
+          child: Row(
+            children: [
+              Icon(icon, color: AppColors.primary, size: 22),
+              const SizedBox(width: 16),
+              Expanded(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      title,
+                      style: const TextStyle(
+                        fontSize: 14,
+                        fontWeight: FontWeight.w600,
+                        color: AppColors.textPrimary,
+                      ),
+                    ),
+                    const SizedBox(height: 2),
+                    Text(
+                      subtitle,
+                      style: const TextStyle(
+                        fontSize: 13,
+                        color: AppColors.textSecondary,
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            ],
+          ),
+        ),
       ),
     );
   }
